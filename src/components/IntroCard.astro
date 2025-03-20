@@ -4,38 +4,46 @@ import Button from "./Button.astro";
 import { LINKS } from "../lib/constants";
 import { Icon } from 'astro-icon/components'
 import Tooltip from "./Tooltip/index";
+import WechatTooltip from "./WechatTooltip/index";
 import { Image } from "astro:assets";
 ---
 
-<Card colSpan="md:col-span-3" rowSpan="md:row-span-4">
-  <div class="flex w-full h-full">
+<Card 
+  colSpan="md:col-span-3" 
+  rowSpan="md:row-span-4"
+>
+  <div class="absolute inset-0 bg-gradient-to-br from-primary-900 to-gray-900 rounded-lg -z-10"></div>
+  
+  <div class="flex w-full h-full relative z-0">
     <div class="flex flex-col justify-between md:max-h-[300px] gap-4">
       <div class="flex flex-col h-full">
-        <h6 class="text-sm font-light m-0 text-gray-500">welcome</h6>
+        <h6 class="text-sm font-light m-0 text-primary-500">Life is short, interesting is better</h6>
         <p class="m-0 font-light text-xl">
-          Hi, 我是 <b class="font-bold">零度</b>, 一名互联网产品设计，一名互联网产品设计一名互联网产品设计一名互联网产品设计
+          Hi, 我是 <b class="font-bold">零度</b>, 一名互联网产品设计
         </p>
         <p class="m-0 font-light text-xl">一名互联网产品设计</p>
+        <p class="m-0 font-light text-xl">一名互联网产品设计</p>
+        <p class="m-0 font-light text-xl">一名互联网产品设计</p>
       </div>
-      <div class="flex gap-4">
-        <a href={LINKS.github} aria-label="github profile" target="_blank">
-          <Button aria-label="github profile">
-            <Icon name="ri:github-fill" class="h-6" />
-            <span class="sr-only">GitHub Profile</span>
+      <div class="flex gap-2">
+        <a href="mailto:490878117@qq.com" aria-label="email" target="_blank">
+          <Button aria-label="email">
+            <Icon name="ri:mail-fill" class="h-6" />
+            <span class="sr-only">Email</span>
           </Button>
         </a>
-        <a href={LINKS.linkedin} aria-label="linkedin profile" target="_blank">
-          <Button aria-label="linkedin profile">
-            <Icon name="ri:linkedin-box-fill" class="h-6" />
-            <span class="sr-only">Linkedin Profile</span>
+        <WechatTooltip client:visible wechatId="moonandapple" qrCodeSrc="/wechat-qr-placeholder.svg">
+          <Button aria-label="wechat">
+            <Icon name="ri:wechat-fill" class="h-6" />
+            <span class="sr-only">WeChat</span>
           </Button>
-        </a>
-        <a href={LINKS.dribble} aria-label="dribble profile" target="_blank">
+        </WechatTooltip>
+        <!-- <a href={LINKS.dribble} aria-label="dribble profile" target="_blank">
           <Button aria-label="dribble profile">
             <Icon name="ri:dribbble-fill" class="h-6" />
             <span class="sr-only">Dribble Profile</span>
           </Button>
-        </a>
+        </a> -->
         <Tooltip client:visible>
           <Button aria-label="easter egg btn">
             <Icon name="ri:emotion-laugh-line" class="h-6" />
@@ -48,8 +56,8 @@ import { Image } from "astro:assets";
       width="300"
       height="300"
       src="/me.webp"
-      class="w-auto max-h-[300px] select-none absolute right-[-110px] bottom-[-20px] z-[-1] opacity-50 md:opacity-100 md:relative md:right-auto md:bottom-auto md:z-auto pointer-events-none"
-      alt="你的头像描述"
+      class="w-auto max-h-[300px] select-none absolute right-[-115px] bottom-[-40px] z-[-1] opacity-50 md:opacity-100 md:relative md:left-[145px] md:bottom-auto md:z-auto pointer-events-none"
+      alt="零度的头像描述"
     />
   </div>
 </Card>

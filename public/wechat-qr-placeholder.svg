@@ -1,0 +1,7 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="180" fill="#F3F4F6"/>
+  <rect x="30" y="30" width="120" height="120" rx="8" fill="#E5E7EB"/>
+  <rect x="50" y="50" width="80" height="80" rx="4" fill="#D1D5DB"/>
+  <path d="M65 65H75V75H65V65ZM105 65H115V75H105V65ZM65 105H75V115H65V105ZM85 85H95V95H85V85ZM105 105H115V115H105V105Z" fill="#9CA3AF"/>
+  <text x="90" y="140" text-anchor="middle" font-family="Arial" font-size="10" fill="#6B7280">请扫描二维码添加微信</text>
+</svg>

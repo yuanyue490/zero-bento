@@ -11,13 +11,39 @@ interface Props {
   colorText?: string;
   height?: string;
   width?: string;
+  bgColor?: string;
+  gradientFrom?: string;
+  gradientTo?: string;
+  gradientDir?: string;
 }
 
-const { title, body, colSpan, rowSpan, href, colorText, height } = Astro.props;
+const { 
+  title, 
+  body, 
+  colSpan, 
+  rowSpan, 
+  href, 
+  colorText, 
+  height,
+  bgColor, 
+  gradientFrom, 
+  gradientTo, 
+  gradientDir = "br" 
+} = Astro.props;
+
+let bgClass = "bg-darkslate-500";
+
+if (gradientFrom && gradientTo) {
+  bgClass = `bg-gradient-to-${gradientDir} from-${gradientFrom} to-${gradientTo}`;
+  console.log("应用渐变背景:", bgClass);
+} else if (bgColor) {
+  bgClass = `bg-${bgColor}`;
+  console.log("应用单色背景:", bgClass);
+}
 ---
 
 <div
-  class={`card flex flex-col h-max sm:h-auto group overflow-hidden transform-y-[-40%] bg-darkslate-500 shadow-lg rounded-lg p-6 border border-darkslate-100 hover:border-primary-500 align-start flex-none ${
+  class={`card flex flex-col h-max sm:h-auto group overflow-hidden transform-y-[-40%] ${bgClass} shadow-lg rounded-lg p-6 border border-darkslate-100 hover:border-primary-500 align-start flex-none ${
     height || "h-full"
   } justify-start relative transform perspective-1200 w-full transition duration-75 ease-in-out col-span-1 ${
     colSpan || "md:col-span-2"
