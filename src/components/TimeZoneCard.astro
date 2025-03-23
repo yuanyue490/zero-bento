@@ -1,11 +1,11 @@
 ---
-import { getCurrentTimeInItaly, formatTimeForItaly } from "../lib/helpers";
+import { getCurrentTimeInBeijing, formatTimeForBeijing } from "../lib/helpers";
 import Card from "./Card/index.astro";
 ---
 
 <script>
   import { onCleanup, onMount } from "solid-js";
-  import { formatTimeForItaly } from "../lib/helpers";
+  import { formatTimeForBeijing } from "../lib/helpers";
 
   let interval: ReturnType<typeof setInterval>;
 
@@ -14,26 +14,34 @@ import Card from "./Card/index.astro";
     const now = new Date();
 
     if (timeDisplay) {
-      timeDisplay.textContent = formatTimeForItaly(now);
+      timeDisplay.textContent = formatTimeForBeijing(now);
       timeDisplay.setAttribute("datetime", now.toISOString());
     }
   }
 
   onMount(() => {
-    interval = setInterval(updateClock, 1000);
+    // 只在浏览器环境添加事件监听器
+    if (typeof window !== 'undefined') {
+      interval = setInterval(updateClock, 1000);
+    }
   });
 
   onCleanup(() => {
-    clearInterval(interval);
+    // 只在浏览器环境移除事件监听器
+    if (typeof window !== 'undefined') {
+      clearInterval(interval);
+    }
   });
 </script>
 
-<Card colSpan="lg:col-span-2" rowSpan="md:row-span-2" title="Time zone">
-  <time
-    datetime=""
-    id="timeDisplay"
-    class="text-2xl xl:text-5xl xl:whitespace-nowrap w-50 xl:w-100 h-[calc(100%-28px)] font-serif flex justify-center items-center"
-  >
-    {formatTimeForItaly(getCurrentTimeInItaly())}
-  </time>
+<Card colSpan="lg:col-span-2" rowSpan="md:row-span-2" title="Beijing Time">
+  <div class="w-full h-full flex items-center justify-center">
+    <time
+      datetime=""
+      id="timeDisplay"
+      class="text-3xl md:text-4xl xl:text-5xl font-serif"
+    >
+      {formatTimeForBeijing(getCurrentTimeInBeijing())}
+    </time>
+  </div>
 </Card>

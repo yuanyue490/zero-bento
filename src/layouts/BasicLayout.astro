@@ -110,8 +110,11 @@ const schema =
     <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   </head>
   <body
-    class="bg-darkslate-700 md:h-screen flex flex-col justify-center items-center"
+    class="bg-darkslate-700 md:h-screen flex flex-col justify-center items-center relative"
   >
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+      <div class="absolute top-[-30vh] left-1/2 -translate-x-1/2 w-[120vw] h-[60vh] bg-radial-gradient opacity-30"></div>
+    </div>
     <slot name="loader" />
     <slot />
   </body>
@@ -139,6 +142,10 @@ const schema =
     margin: 0;
     font-family: "Satoshi", sans-serif;
     -webkit-font-smoothing: antialiased;
+  }
+
+  .bg-radial-gradient {
+    background: radial-gradient(ellipse 100% 60% at center, rgba(30, 64, 175, 0.8) 0%, rgba(30, 64, 175, 0.4) 25%, rgba(30, 64, 175, 0) 70%);
   }
 
   h1,
