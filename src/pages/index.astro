@@ -50,7 +50,7 @@ const posts = (await getCollection("blog"))?.sort(
     <AboutMe />
     <ContactsCard />
     <TimeZone />
-    <Now />
+    <!-- <Now />
     <Card
       colSpan="md:col-span-1"
       rowSpan="md:row-span-1"
@@ -60,6 +60,38 @@ const posts = (await getCollection("blog"))?.sort(
     >
       <div class="h-full w-full absolute inset-0 -z-10">
         <Globe client:load />
+      </div>
+    </Card> -->
+    <Card
+      colSpan="md:col-span-1"
+      rowSpan="md:row-span-2 flex gap-4"
+      title="Blog"
+      href="/blog"
+    >
+      <div class="flex flex-col gap-4">
+        {
+          posts?.slice(0, 3).map((post) => (
+            // <a
+            //   class="text-sm md:text-base decoration-none flex justify-between"
+            //   href={`/blog/${post.id}`}
+            // >
+            <div class="list-none w-full text-neutral-100 hover:text-neutral-400 ease-in-out transition-colors border-b-neutral-400 border-dashed border-b-1 my-0">
+              <p class="inline-block whitespace-nowrap text-xs">
+                {post.data.title}
+              </p>
+              {post.data.pubDate && (
+                <time
+                  class="text-right tabular-nums text-xs"
+                  datetime={post.data.pubDate.toISOString()}
+                  data-date={post.data.pubDate.toISOString()}
+                >
+                  {formatDate(post.data.pubDate)}
+                </time>
+              )}
+            </div>
+            // </a>
+          ))
+        }
       </div>
     </Card>
     <Card
@@ -96,11 +128,16 @@ const posts = (await getCollection("blog"))?.sort(
     </Card>
     <Card colSpan="md:col-span-1" rowSpan="md:row-span-1">
       <p class="text-xs">
+        by ZeroYue.
+      </p>
+    </Card>
+    <Card colSpan="md:col-span-1" rowSpan="md:row-span-1">
+      <p class="text-xs">
         © 2024 · Crafted with ♥️ using <a
           href="https://astro.build/"
           target="_blank"
           class="text-red-500">Astro</a
-        > by 零度.
+        > by ZeroYue.
       </p>
     </Card>
   </main>
