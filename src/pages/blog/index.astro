@@ -20,8 +20,8 @@ const posts = (await getCollection("blog"))?.sort(
 </script>
 
 <Layout
-  title="零度 - Blog"
-  description="你的博客描述"
+  title="零度 博客"
+  description="零度的博客描述"
 >
   <main
     class="w-screen h-screen flex flex-col justify-start items-start max-w-3xl mx-auto p-8"
@@ -32,6 +32,9 @@ const posts = (await getCollection("blog"))?.sort(
       >Back</a
     >
     <h1 class="text-4xl font-bold mb-4 text-neutral-100">Posts</h1>
+    <p class="text-neutral-400 mb-8">
+      记录一些细碎的思考和调研
+    </p>
     <ul class="w-full">
       {
         posts?.map((post) => (

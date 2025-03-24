@@ -1,0 +1,130 @@
+---
+import { getEntry, render } from "astro:content";
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  return (await getCollection("portfolio")).map(({ id }) => ({
+    params: { id: id as string },
+  }));
+}
+
+const { id } = Astro.params;
+
+if (!id) {
+  throw new Error("id is missing");
+}
+
+const entry = await getEntry("portfolio", id);
+
+if (!entry) {
+  return Astro.redirect("/404");
+}
+
+const { Content, remarkPluginFrontmatter } = await render(entry);
+---
+
+<Layout
+  title={`${entry.data.title} | 零度作品集`}
+  description={entry.data.description || entry.data.title}
+>
+  <main class="w-full max-w-4xl mx-auto p-4 md:p-8">
+    <a
+      href="/portfolio"
+      class="inline-block text-white bg-neutral-900 hover:bg-neutral-800 px-4 py-2 mb-8 border-1 border-solid border-neutral-600 rounded-lg"
+    >
+      返回作品集
+    </a>
+
+    <header class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold mb-4 text-white">{entry.data.title}</h1>
+      
+      {entry.data.description && (
+        <p class="text-xl text-neutral-300 mb-4">{entry.data.description}</p>
+      )}
+      
+      <div class="flex flex-wrap items-center gap-4 text-sm text-neutral-400">
+        {entry.data.pubDate && (
+          <div class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <time datetime={entry.data.pubDate.toISOString()}>
+              {entry.data.pubDate.toLocaleDateString('zh-CN', {year: 'numeric', month: 'long'})}
+            </time>
+          </div>
+        )}
+        
+        {entry.data.client && (
+          <div class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+            <span>{entry.data.client}</span>
+          </div>
+        )}
+        
+        {entry.data.tags && entry.data.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mt-2 md:mt-0">
+            {entry.data.tags.map((tag: string) => (
+              <span class="bg-neutral-800 text-neutral-300 px-2 py-1 rounded-full text-xs">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+    
+    {entry.data.coverImage && (
+      <div class="w-full h-[40vh] md:h-[50vh] mb-8 overflow-hidden rounded-lg">
+        <img 
+          src={entry.data.coverImage} 
+          alt={entry.data.title} 
+          class="w-full h-full object-cover"
+        />
+      </div>
+    )}
+
+    <article class="prose prose-invert prose-lg max-w-none">
+      <Content />
+    </article>
+    
+    {(entry.data.portfolioImages && entry.data.portfolioImages.length > 0) && (
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-6 text-white">项目图集</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {entry.data.portfolioImages.map((image: {url: string, caption?: string}) => (
+            <figure class="overflow-hidden rounded-lg">
+              <img src={image.url} alt={image.caption || entry.data.title} class="w-full h-auto" />
+              {image.caption && (
+                <figcaption class="p-2 text-sm text-neutral-400">{image.caption}</figcaption>
+              )}
+            </figure>
+          ))}
+        </div>
+      </div>
+    )}
+  </main>
+</Layout>
+
+<style is:global>
+  .prose {
+    color: #e5e5e5;
+  }
+  
+  .prose a {
+    color: #38bdf8;
+    text-decoration: none;
+  }
+  
+  .prose a:hover {
+    text-decoration: underline;
+  }
+  
+  .prose img {
+    border-radius: 0.5rem;
+  }
+</style> 

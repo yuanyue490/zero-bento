@@ -1,0 +1,268 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+// 定义设计作品图片数据
+const designImages = [
+  {
+    id: "design1",
+    title: "作品一",
+    src: "/portfolio/sample-cover.jpg",
+    category: "UI设计"
+  },
+  {
+    id: "design2",
+    title: "作品二", 
+    src: "/portfolio/sample-1.jpg",
+    category: "平面设计"
+  },
+  {
+    id: "design3",
+    title: "作品三",
+    src: "/portfolio/sample-2.jpg",
+    category: "品牌设计"
+  },
+  {
+    id: "design4",
+    title: "作品四",
+    src: "/portfolio/sample-3.jpg",
+    category: "UI设计"
+  },
+  {
+    id: "design5",
+    title: "作品五",
+    src: "/portfolio/sample-4.jpg", 
+    category: "交互设计"
+  },
+  {
+    id: "design6",
+    title: "作品六",
+    src: "/portfolio/sample-cover.jpg",
+    category: "平面设计"
+  },
+  {
+    id: "design7",
+    title: "作品七",
+    src: "/portfolio/sample-1.jpg",
+    category: "UI设计"
+  },
+  {
+    id: "design8",
+    title: "作品八",
+    src: "/portfolio/sample-2.jpg",
+    category: "品牌设计"
+  },
+  {
+    id: "design9",
+    title: "作品九",
+    src: "/portfolio/sample-3.jpg",
+    category: "交互设计"
+  }
+];
+---
+
+<script>
+  import { timeline, type TimelineDefinition } from "motion";
+  import { loaderAnimation } from "../../lib/constants";
+
+  // 检查是否在浏览器环境中
+  const isBrowser = typeof window !== 'undefined';
+
+  if (isBrowser) {
+    const sequence = [loaderAnimation];
+    timeline(sequence as TimelineDefinition);
+  }
+</script>
+
+<Layout
+  title="零度 - 设计作品"
+  description="视觉设计作品展示"
+>
+  <main class="w-screen min-h-screen flex flex-col justify-start items-start max-w-6xl mx-auto p-4 md:p-6">
+    <a
+      href="/"
+      class="text-white bg-neutral-900 hover:bg-neutral-800 px-4 py-2 mb-8 border-1 border-solid border-neutral-600 rounded-lg transition-colors duration-200"
+    >
+      返回首页
+    </a>
+    
+    <div class="w-full mb-10">
+      <h1 class="text-4xl font-bold mb-3 text-neutral-100">设计作品</h1>
+      <p class="text-neutral-400">
+        精选视觉设计作品集
+      </p>
+    </div>
+    
+    <!-- 分类筛选 -->
+    <div class="w-full flex flex-wrap gap-3 mb-8">
+      <button class="active-filter px-4 py-2 bg-blue-600 text-white rounded-full text-sm">全部</button>
+      <button class="filter-btn px-4 py-2 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 rounded-full text-sm">UI设计</button>
+      <button class="filter-btn px-4 py-2 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 rounded-full text-sm">平面设计</button>
+      <button class="filter-btn px-4 py-2 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 rounded-full text-sm">品牌设计</button>
+      <button class="filter-btn px-4 py-2 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 rounded-full text-sm">交互设计</button>
+    </div>
+    
+    <!-- 设计图片网格 -->
+    <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+      {
+        designImages.map(image => (
+          <div class="design-image-container group">
+            <div 
+              class="view-image block w-full cursor-pointer overflow-hidden bg-neutral-800 rounded-lg aspect-[4/3] relative group"
+              data-src={image.src}
+              data-title={image.title}
+            >
+              <img 
+                src={image.src} 
+                alt={image.title} 
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                <div class="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                  <span class="text-white font-medium px-4 py-2 rounded-full bg-black bg-opacity-60">
+                    查看大图
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-between items-center mt-2">
+              <p class="text-white text-sm font-medium">{image.title}</p>
+              <p class="text-neutral-400 text-xs">{image.category}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </main>
+  
+  <!-- 轻量级图片查看器 -->
+  <div id="image-viewer" class="fixed inset-0 z-50 bg-black/90 opacity-0 pointer-events-none transition-opacity duration-300 flex flex-col items-center justify-center">
+    <button id="close-viewer" class="absolute top-4 right-4 text-white hover:text-gray-300 text-4xl">&times;</button>
+    <div class="relative max-w-4xl max-h-[85vh] p-4">
+      <img id="viewed-image" src="" alt="" class="max-w-full max-h-[85vh] object-contain" />
+      <p id="image-title" class="text-white text-center mt-2 font-medium"></p>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // 检查是否在浏览器环境中
+  if (typeof window !== 'undefined') {
+    // 图片查看功能
+    document.addEventListener('DOMContentLoaded', () => {
+      const viewer = document.getElementById('image-viewer');
+      const viewedImage = document.getElementById('viewed-image');
+      const imageTitle = document.getElementById('image-title');
+      const closeBtn = document.getElementById('close-viewer');
+      const imageItems = document.querySelectorAll('.view-image');
+      
+      // 打开图片查看器
+      imageItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const src = item.getAttribute('data-src');
+          const title = item.getAttribute('data-title');
+          
+          if (viewedImage && src) {
+            (viewedImage as HTMLImageElement).src = src;
+            
+            if (imageTitle && title) {
+              imageTitle.textContent = title;
+            }
+            
+            if (viewer) {
+              viewer.style.opacity = '1';
+              viewer.style.pointerEvents = 'auto';
+              document.body.style.overflow = 'hidden'; // 防止背景滚动
+            }
+          }
+        });
+      });
+      
+      // 关闭图片查看器
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          if (viewer) {
+            viewer.style.opacity = '0';
+            viewer.style.pointerEvents = 'none';
+            document.body.style.overflow = ''; // 恢复背景滚动
+          }
+        });
+      }
+      
+      // 点击背景也可以关闭
+      if (viewer) {
+        viewer.addEventListener('click', (e) => {
+          if (e.target === viewer) {
+            viewer.style.opacity = '0';
+            viewer.style.pointerEvents = 'none';
+            document.body.style.overflow = '';
+          }
+        });
+      }
+      
+      // ESC键关闭
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && viewer && viewer.style.opacity === '1') {
+          viewer.style.opacity = '0';
+          viewer.style.pointerEvents = 'none';
+          document.body.style.overflow = '';
+        }
+      });
+    });
+
+    // 分类筛选功能
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const allButton = document.querySelector('.active-filter');
+      const designImages = document.querySelectorAll('.design-image-container');
+      
+      // 所有分类按钮的点击事件
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // 移除所有按钮的活跃状态
+          allButton?.classList.remove('active-filter', 'bg-blue-600');
+          allButton?.classList.add('bg-neutral-800');
+          
+          filterButtons.forEach(btn => {
+            btn.classList.remove('active-filter', 'bg-blue-600');
+            btn.classList.add('bg-neutral-800');
+          });
+          
+          // 添加当前按钮的活跃状态
+          button.classList.add('active-filter', 'bg-blue-600');
+          button.classList.remove('bg-neutral-800');
+          
+          // 过滤图片
+          const category = button.textContent?.trim();
+          designImages.forEach(image => {
+            const categoryElement = image.querySelector('p:last-child');
+            const imageCategory = categoryElement?.textContent;
+            if (category && imageCategory === category) {
+              image.classList.remove('hidden');
+            } else {
+              image.classList.add('hidden');
+            }
+          });
+        });
+      });
+      
+      // "全部"按钮的点击事件
+      allButton?.addEventListener('click', () => {
+        // 移除所有按钮的活跃状态
+        filterButtons.forEach(btn => {
+          btn.classList.remove('active-filter', 'bg-blue-600');
+          btn.classList.add('bg-neutral-800');
+        });
+        
+        // 添加"全部"按钮的活跃状态
+        allButton.classList.add('active-filter', 'bg-blue-600');
+        allButton.classList.remove('bg-neutral-800');
+        
+        // 显示所有图片
+        designImages.forEach(image => {
+          image.classList.remove('hidden');
+        });
+      });
+    });
+  }
+</script> 
