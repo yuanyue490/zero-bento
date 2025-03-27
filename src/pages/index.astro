@@ -9,6 +9,7 @@ import Now from "../components/Now.astro";
 import Globe from "../components/Globe";
 import { getCollection } from "astro:content";
 import { formatDate } from "../lib/helpers";
+import { Icon } from "astro-icon/components";
 
 const posts = (await getCollection("blog"))?.sort(
   (blogEntryA, blogEntryB) =>
@@ -66,27 +67,20 @@ const posts = (await getCollection("blog"))?.sort(
       colSpan="md:col-span-1"
       rowSpan="md:row-span-2 flex gap-4"
       title="作品"
-      href="/blog"
+      href="/design"
     >
-      <div class="flex flex-col gap-2 mt-2">
-        {
-          posts?.slice(0, 3).map((post) => (
-            <div class="list-none w-full text-neutral-100 hover:text-neutral-400 ease-in-out transition-colors border-b-neutral-400 border-dashed border-b-1 my-0">
-              <p class="inline-block whitespace-nowrap text-xs">
-                {post.data.title}
-              </p>
-              {post.data.pubDate && (
-                <time
-                  class="text-right tabular-nums text-xs"
-                  datetime={post.data.pubDate.toISOString()}
-                  data-date={post.data.pubDate.toISOString()}
-                >
-                  {formatDate(post.data.pubDate)}
-                </time>
-              )}
-            </div>
-          ))
-        }
+      <div class="flex flex-col justify-center h-full">        
+        <div class="flex justify-end items-center gap-2 mt-6">
+          <div class="icon-wrapper">
+            <img src="/svg/square-half-light.svg" alt="UI设计" class="custom-icon icon-gradient hover:opacity-100 hover:scale-110 hover:rotate-6 transition-all duration-300 ease-in-out" />
+          </div>
+          <div class="icon-wrapper">
+            <img src="/svg/bounding-box-light.svg" alt="界面设计" class="custom-icon icon-gradient hover:opacity-100 hover:scale-110 hover:rotate-6 transition-all duration-300 ease-in-out" />
+          </div>
+          <div class="icon-wrapper">
+            <img src="/svg/cube-transparent-light.svg" alt="3D设计" class="custom-icon icon-gradient hover:opacity-100 hover:scale-110 hover:rotate-6 transition-all duration-300 ease-in-out" />
+          </div>
+        </div>
       </div>
     </Card>
     <Card
@@ -118,7 +112,7 @@ const posts = (await getCollection("blog"))?.sort(
     </Card>
     <Card colSpan="md:col-span-1" rowSpan="md:row-span-1">
       <p class="text-xs">
-        by ZeroYue.
+        Project Lab
       </p>
     </Card>
     <Card colSpan="md:col-span-1" rowSpan="md:row-span-1">
@@ -132,3 +126,21 @@ const posts = (await getCollection("blog"))?.sort(
     </Card>
   </main>
 </Layout>
+
+<style>
+  .icon-wrapper {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .custom-icon {
+    width: 3rem;
+    height: 3rem;
+    filter: invert(70%) opacity(70%) drop-shadow(0px 0px 1px rgba(255, 255, 255, 0.1));
+  }
+  
+  .icon-gradient {
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.1) 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.1) 100%);
+  }
+</style>
