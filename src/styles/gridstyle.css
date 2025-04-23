@@ -1,0 +1,28 @@
+.magicpattern { 
+  width: 100%;
+  height: 100vh;
+  background-color: #111111;
+  background-image: 
+    linear-gradient(to right, rgba(28, 28, 28, 0.55) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(28, 28, 28, 0.55) 1px, transparent 1px);
+  background-size: 50px 50px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+/* .magicpattern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    rgba(30, 64, 175, 0.2) 0%,
+    rgba(17, 17, 17, 0.8) 100%
+  );
+  pointer-events: none;
+}  */

@@ -1,5 +1,6 @@
 ---
 import { LINKS } from "../lib/constants";
+import "../styles/gridstyle.css";
 
 interface Props {
   title: string;
@@ -112,6 +113,7 @@ const schema =
   <body
     class="bg-darkslate-700 md:h-screen flex flex-col justify-center items-center relative"
   >
+    <div class="magicpattern"></div>
     <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
       <div class="absolute top-[-30vh] left-1/2 -translate-x-1/2 w-[120vw] h-[60vh] bg-radial-gradient opacity-30"></div>
     </div>

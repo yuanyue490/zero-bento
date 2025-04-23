@@ -1,0 +1,22 @@
+---
+description: Project Overview
+globs: 
+alwaysApply: false
+---
+# Project Overview
+
+This is a modern web application built with Astro and UnoCSS. Here are the key files and directories:
+
+- [astro.config.mjs](mdc:astro.config.mjs) - Astro configuration
+- [uno.config.ts](mdc:uno.config.ts) - UnoCSS configuration and theme settings
+- [src/](mdc:src) - Main source code directory
+- [public/](mdc:public) - Static assets
+
+## Key Configuration Files
+- [tsconfig.json](mdc:tsconfig.json) - TypeScript configuration
+- [postcss.config.cjs](mdc:postcss.config.cjs) - PostCSS configuration
+- [svelte.config.js](mdc:svelte.config.js) - Svelte configuration
+
+## Documentation
+- [bento-cards-guide.md](mdc:bento-cards-guide.md) - Guide for Bento card components
+- [README.md](mdc:README.md) - Project documentation
