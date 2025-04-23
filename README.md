@@ -15,7 +15,6 @@
 - 可轻松部署到[Netlify](https://www.netlify.com/)或其他平台
 - 博客功能
 - RSS支持(your-domain/rss.xml)
-- 酷炫的3D地球可视化
 
 ## 技术栈
 
