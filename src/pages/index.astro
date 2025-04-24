@@ -40,7 +40,7 @@ const posts = (await getCollection("blog"))?.sort(
 </script>
 
 <Layout
-  title="零度 - 你的职位"
+  title="Zero Yue - 你的职位"
   description="你的个人描述，可以包括技能、专长和兴趣等"
 >
   <main
@@ -97,10 +97,15 @@ const posts = (await getCollection("blog"))?.sort(
         }
       </div>
     </Card>
-    <Card colSpan="md:col-span-1" rowSpan="md:row-span-1">
-      <p class="text-xs">
-        Project Lab
-      </p>
+    <Card 
+      colSpan="md:col-span-1" 
+      rowSpan="md:row-span-1" 
+      title="Project Lab" 
+      href="/lab"
+      bgColor="darkslate-600"
+    >
+      <div class="lab-mask-bg absolute inset-0 opacity-20 z-0"></div>
+      <p class="text-xs relative z-10"></p>
     </Card>
     <Card colSpan="md:col-span-1" rowSpan="md:row-span-1">
       <p class="text-xs">
@@ -129,5 +134,12 @@ const posts = (await getCollection("blog"))?.sort(
   .icon-gradient {
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.1) 100%);
     -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.1) 100%);
+  }
+  
+  .lab-mask-bg {
+    background-image: url('/images/Lab-Mask.png');
+    background-size: cover;
+    background-position: right;
+    border-radius: 0.5rem;
   }
 </style>

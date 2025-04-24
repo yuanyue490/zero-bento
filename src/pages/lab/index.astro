@@ -1,0 +1,194 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+// 定义项目数据
+const projects = [
+  {
+    id: "project1",
+    title: "极简壁纸制作器",
+    description: "这是我开发的第一个个人项目，主要功能是...",
+    image: "/preview.png",
+    url: "https://wallpaper.zeroyue.com/",
+    category: "Web应用",
+  },
+  {
+    id: "project2",
+    title: "项目二",
+    description: "响应式设计的个人作品集网站",
+    image: "/preview.png", 
+    url: "#",
+    category: "网站设计",
+  },
+  {
+    id: "project3",
+    title: "项目三",
+    description: "基于JavaScript的动画效果库",
+    image: "/preview.png",
+    url: "#",
+    category: "开源库",
+  },
+  {
+    id: "project4",
+    title: "项目四",
+    description: "简易的在线绘图工具",
+    image: "/preview.png", 
+    url: "#",
+    category: "Web应用",
+  },
+  {
+    id: "project5",
+    title: "项目五",
+    description: "个人博客系统",
+    image: "/preview.png",
+    url: "#",
+    category: "网站设计",
+  }
+];
+
+// 获取所有唯一的分类
+const categories = [...new Set(projects.map(project => project.category))];
+---
+
+<script>
+  import { timeline, type TimelineDefinition } from "motion";
+  import { loaderAnimation } from "../../lib/constants";
+
+  // 检查是否在浏览器环境中
+  const isBrowser = typeof window !== 'undefined';
+
+  if (isBrowser) {
+    const sequence = [loaderAnimation];
+    timeline(sequence as TimelineDefinition);
+  }
+</script>
+
+<Layout
+  title="Zero Yue - 项目实验室"
+  description="个人线上实验项目"
+>
+  <main class="w-screen min-h-screen flex flex-col justify-start items-start max-w-6xl mx-auto p-4 md:p-6">
+    <a
+      href="/"
+      class="text-white bg-neutral-900 hover:bg-neutral-800 px-4 py-2 mb-8 border-1 border-solid border-neutral-600 rounded-lg transition-colors duration-200"
+    >
+      返回首页
+    </a>
+    
+    <div class="w-full mb-10">
+      <h1 class="text-4xl font-bold mb-3 text-neutral-100">项目实验室</h1>
+      <p class="text-neutral-400">
+        个人线上实验项目
+      </p>
+    </div>
+    
+    <!-- 分类筛选 -->
+    <div class="w-full flex flex-wrap gap-3 mb-8">
+      <button class="active-filter px-4 py-2 bg-blue-600 text-white rounded-full text-sm">全部</button>
+      {categories.map(category => (
+        <button class="filter-btn px-4 py-2 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 rounded-full text-sm">
+          {category}
+        </button>
+      ))}
+    </div>
+    
+    <!-- 项目网格 -->
+    <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {
+        projects.map(project => (
+          <a 
+            href={project.url}
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="project-card bg-darkslate-500 rounded-lg overflow-hidden transition-all duration-300 hover:translate-y-[-4px] hover:shadow-lg border border-darkslate-100 hover:border-primary-500"
+            data-category={project.category}
+          >
+            <div class="aspect-video bg-darkslate-600 overflow-hidden">
+              <img 
+                src={project.image} 
+                alt={project.title} 
+                class="w-full h-full object-cover"
+                loading="lazy"
+                onerror="this.src='/svg/placeholder-image.svg'"
+              />
+            </div>
+            <div class="p-4">
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="text-lg font-semibold text-white">{project.title}</h3>
+                <span class="text-xs bg-neutral-700 text-neutral-300 px-2 py-1 rounded-full">
+                  {project.category}
+                </span>
+              </div>
+              <p class="text-neutral-400 text-sm mb-3">{project.description}</p>
+              <div class="flex justify-end">
+                <span class="text-primary-400 text-sm flex items-center">
+                  查看详情
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </main>
+</Layout>
+
+<script>
+  // 检查是否在浏览器环境中
+  if (typeof window !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const allButton = document.querySelector('.active-filter');
+      const projectCards = document.querySelectorAll('.project-card');
+      
+      // 所有分类按钮的点击事件
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // 移除所有按钮的活跃状态
+          allButton?.classList.remove('active-filter', 'bg-blue-600');
+          allButton?.classList.add('bg-neutral-800');
+          
+          filterButtons.forEach(btn => {
+            btn.classList.remove('active-filter', 'bg-blue-600');
+            btn.classList.add('bg-neutral-800');
+          });
+          
+          // 添加当前按钮的活跃状态
+          button.classList.add('active-filter', 'bg-blue-600');
+          button.classList.remove('bg-neutral-800');
+          
+          // 过滤项目
+          const category = button.textContent?.trim();
+          projectCards.forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+            if (category && cardCategory === category) {
+              card.classList.remove('hidden');
+            } else {
+              card.classList.add('hidden');
+            }
+          });
+        });
+      });
+      
+      // "全部"按钮的点击事件
+      allButton?.addEventListener('click', () => {
+        // 移除所有按钮的活跃状态
+        filterButtons.forEach(btn => {
+          btn.classList.remove('active-filter', 'bg-blue-600');
+          btn.classList.add('bg-neutral-800');
+        });
+        
+        // 添加"全部"按钮的活跃状态
+        allButton.classList.add('active-filter', 'bg-blue-600');
+        allButton.classList.remove('bg-neutral-800');
+        
+        // 显示所有项目
+        projectCards.forEach(card => {
+          card.classList.remove('hidden');
+        });
+      });
+    });
+  }
+</script> 
