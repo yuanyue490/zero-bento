@@ -76,7 +76,7 @@ function WechatTooltip(props: Props) {
             <p class="text-lg font-bold mb-2">微信扫一扫</p>
             
             {/* 二维码图片 */}
-            <div class="w-[180px] h-[180px] mx-auto mb-2 bg-gray-100 flex items-center justify-center">
+            <div class="w-[180px] h-[180px] mx-auto mb-2 bg-transparent flex items-center justify-center">
               {props.qrCodeSrc ? (
                 <img src={props.qrCodeSrc} alt="微信二维码" class="w-full h-full object-contain" />
               ) : (

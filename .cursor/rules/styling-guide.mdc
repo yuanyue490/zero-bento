@@ -3,3 +3,38 @@ description:
 globs:
 alwaysApply: false
 ---
+# Styling Guide
+
+This project uses UnoCSS for styling. The main configuration is in [uno.config.ts](mdc:uno.config.ts).
+
+## Key Features
+
+### Color System
+- Primary colors: primary-100 to primary-900
+- Gray scale: gray-50 to gray-900
+- Dark slate: darkslate-50 to darkslate-900
+
+### Typography
+- Font families: CabinetGrotesk and Satoshi
+- Usage: `font-sans` class for default font
+
+### Custom Shadows
+- Regular shadow: `shadow-custom`
+- Hover shadow: `shadow-custom-hover`
+
+### Grid System
+- Auto-fill rows: `grid-rows-auto-250`
+- Responsive columns: `grid-cols-4-minmax`
+
+## Best Practices
+1. Use atomic classes directly in components
+2. Follow the color system for consistency
+3. Utilize predefined shadows for depth
+4. Apply responsive design using built-in utilities
+
+## Example Usage
+```html
+<div class="bg-primary-500 text-white p-4 shadow-custom hover:shadow-custom-hover">
+  <h1 class="font-sans text-2xl">Title</h1>
+</div>
+```
