@@ -29,6 +29,33 @@ const { title, description, pubDate, minutesRead, url } = Astro.props;
     </div>
     <article class="prose prose-p:text-red-500 prose-slate prose-invert">
       <slot />
+      <div class="not-prose">
+        <hr class="my-8 border-neutral-800" />
+        <div class="text-center text-neutral-500 my-8">
+          <span class="text-sm">END</span>
+          <span class="block mb-2">◆</span>
+        </div>
+      </div>
     </article>
   </main>
 </BasicLayout>
+
+<style>
+  .prose {
+    max-width: none;
+  }
+  :global(.prose p) {
+    color: #e5e5e5 !important;
+    margin-bottom: 1.5em;
+  }
+  :global(.prose strong) {
+    color: #fff;
+  }
+  :global(.prose a) {
+    color: #3b82f6;
+    text-decoration: none;
+  }
+  :global(.prose a:hover) {
+    text-decoration: underline;
+  }
+</style>
