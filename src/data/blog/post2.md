@@ -1,18 +1,15 @@
 ---
-title: "Hello, World"
-description: "this is a post example"
-pubDate: 2023-01-21
+title: "C4d教程-几何概念城市"
+description: "C4d教程-几何概念城市"
+pubDate: 2022-01-27
 category: "intro"
 draft: false
 ---
 
-# Hi there!
+#### 教会你如何快速生成几何概念城市
 
-This Markdown file creates a page at `your-domain.com/blog/post1/`
+### Part1
+<video src="https://assets.zeroyue.com/C4d教程-如何快速生成几何概念城市%20A.mp4" controls width="600"></video>
 
-It probably isn't styled much, but Markdown does support:
-
-- **bold** and _italics._
-- lists
-- [links](https://astro.build)
-- and more!
+### Part2
+<video src="https://assets.zeroyue.com/C4d教程-如何快速生成几何概念城市%20B.mp4" controls width="600"></video>

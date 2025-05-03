@@ -83,15 +83,6 @@ const posts = (await getCollection("blog"))?.sort(
               <p class="inline-block whitespace-nowrap text-xs">
                 {post.data.title}
               </p>
-              {post.data.pubDate && (
-                <time
-                  class="text-right tabular-nums text-xs"
-                  datetime={post.data.pubDate.toISOString()}
-                  data-date={post.data.pubDate.toISOString()}
-                >
-                  {formatDate(post.data.pubDate)}
-                </time>
-              )}
             </div>
           ))
         }

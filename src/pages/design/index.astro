@@ -5,59 +5,32 @@ import Layout from "../../layouts/Layout.astro";
 const designImages = [
   {
     id: "design1",
-    title: "作品一",
-    src: "/portfolio/sample-cover.jpg",
-    category: "UI设计"
+    title: "森鸟 logo",
+    src: "/images/design/森鸟 logo-平面.png",
+    category: "平面设计"
   },
   {
     id: "design2",
-    title: "作品二", 
-    src: "/portfolio/sample-1.jpg",
-    category: "平面设计"
+    title: "物流大屏", 
+    src: "/images/design/物流大屏-可视化.png",
+    category: "可视化"
   },
   {
     id: "design3",
-    title: "作品三",
-    src: "/portfolio/sample-2.jpg",
-    category: "品牌设计"
+    title: "Soul",
+    src: "/images/design/soul-三维.jpg",
+    category: "三维设计"
   },
   {
     id: "design4",
-    title: "作品四",
-    src: "/portfolio/sample-3.jpg",
+    title: "拟物化系列",
+    src: "/images/design/拟物化系列-UI.png",
     category: "UI设计"
-  },
-  {
-    id: "design5",
-    title: "作品五",
-    src: "/portfolio/sample-4.jpg", 
-    category: "交互设计"
-  },
-  {
-    id: "design6",
-    title: "作品六",
-    src: "/portfolio/sample-cover.jpg",
-    category: "平面设计"
-  },
-  {
-    id: "design7",
-    title: "作品七",
-    src: "/portfolio/sample-1.jpg",
-    category: "UI设计"
-  },
-  {
-    id: "design8",
-    title: "作品八",
-    src: "/portfolio/sample-2.jpg",
-    category: "品牌设计"
-  },
-  {
-    id: "design9",
-    title: "作品九",
-    src: "/portfolio/sample-3.jpg",
-    category: "交互设计"
   }
 ];
+
+// 获取所有唯一的分类
+const categories = [...new Set(designImages.map(project => project.category))];
 ---
 
 <script>
@@ -95,10 +68,11 @@ const designImages = [
     <!-- 分类筛选 -->
     <div class="w-full flex flex-wrap gap-3 mb-8">
       <button class="active-filter px-4 py-2 bg-blue-600 text-white rounded-full text-sm">全部</button>
-      <button class="filter-btn px-4 py-2 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 rounded-full text-sm">UI设计</button>
-      <button class="filter-btn px-4 py-2 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 rounded-full text-sm">平面设计</button>
-      <button class="filter-btn px-4 py-2 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 rounded-full text-sm">品牌设计</button>
-      <button class="filter-btn px-4 py-2 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 rounded-full text-sm">交互设计</button>
+      {categories.map(category => (
+        <button class="filter-btn px-4 py-2 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 rounded-full text-sm">
+          {category}
+        </button>
+      ))}
     </div>
     
     <!-- 设计图片网格 -->
@@ -214,53 +188,51 @@ const designImages = [
     document.addEventListener('DOMContentLoaded', () => {
       const filterButtons = document.querySelectorAll('.filter-btn');
       const allButton = document.querySelector('.active-filter');
-      const designImages = document.querySelectorAll('.design-image-container');
+      const designItems = document.querySelectorAll('.design-image-container');
       
-      // 所有分类按钮的点击事件
-      filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          // 移除所有按钮的活跃状态
-          allButton?.classList.remove('active-filter', 'bg-blue-600');
-          allButton?.classList.add('bg-neutral-800');
-          
-          filterButtons.forEach(btn => {
-            btn.classList.remove('active-filter', 'bg-blue-600');
-            btn.classList.add('bg-neutral-800');
-          });
-          
-          // 添加当前按钮的活跃状态
-          button.classList.add('active-filter', 'bg-blue-600');
-          button.classList.remove('bg-neutral-800');
-          
-          // 过滤图片
-          const category = button.textContent?.trim();
-          designImages.forEach(image => {
-            const categoryElement = image.querySelector('p:last-child');
-            const imageCategory = categoryElement?.textContent;
-            if (category && imageCategory === category) {
-              image.classList.remove('hidden');
-            } else {
-              image.classList.add('hidden');
-            }
-          });
+      // 点击全部按钮
+      allButton?.addEventListener('click', () => {
+        allButton.classList.add('bg-blue-600', 'text-white');
+        allButton.classList.remove('bg-neutral-800', 'text-neutral-300');
+        
+        filterButtons.forEach(btn => {
+          btn.classList.remove('bg-blue-600', 'text-white');
+          btn.classList.add('bg-neutral-800', 'text-neutral-300');
+        });
+        
+        designItems.forEach(item => {
+          item.classList.remove('hidden');
         });
       });
       
-      // "全部"按钮的点击事件
-      allButton?.addEventListener('click', () => {
-        // 移除所有按钮的活跃状态
-        filterButtons.forEach(btn => {
-          btn.classList.remove('active-filter', 'bg-blue-600');
-          btn.classList.add('bg-neutral-800');
-        });
-        
-        // 添加"全部"按钮的活跃状态
-        allButton.classList.add('active-filter', 'bg-blue-600');
-        allButton.classList.remove('bg-neutral-800');
-        
-        // 显示所有图片
-        designImages.forEach(image => {
-          image.classList.remove('hidden');
+      // 点击分类按钮
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const category = button.textContent?.trim();
+          
+          // 更新按钮样式
+          allButton?.classList.remove('bg-blue-600', 'text-white');
+          allButton?.classList.add('bg-neutral-800', 'text-neutral-300');
+          
+          filterButtons.forEach(btn => {
+            if (btn === button) {
+              btn.classList.add('bg-blue-600', 'text-white');
+              btn.classList.remove('bg-neutral-800', 'text-neutral-300');
+            } else {
+              btn.classList.remove('bg-blue-600', 'text-white');
+              btn.classList.add('bg-neutral-800', 'text-neutral-300');
+            }
+          });
+          
+          // 筛选项目
+          designItems.forEach(item => {
+            const itemCategory = item.querySelector('.text-neutral-400')?.textContent?.trim();
+            if (category === itemCategory) {
+              item.classList.remove('hidden');
+            } else {
+              item.classList.add('hidden');
+            }
+          });
         });
       });
     });

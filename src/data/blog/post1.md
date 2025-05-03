@@ -1,18 +1,15 @@
 ---
-title: "Hello, World"
-description: "this is a post example"
-pubDate: 2023-01-21
+title: "Blender-全息概念城市"
+description: "Blender-全息概念城市"
+pubDate: 2022-2-14
 category: "intro"
 draft: false
 ---
 
-# Hi there!
+#### 教会你如何快速生成全息概念城市
 
-This Markdown file creates a page at `your-domain.com/blog/post1/`
+### Part1
+<video src="https://assets.zeroyue.com/blenderA.mp4" controls width="600"></video>
 
-It probably isn't styled much, but Markdown does support:
-
-- **bold** and _italics._
-- lists
-- [links](https://astro.build)
-- and more!
+### Part2
+<video src="https://assets.zeroyue.com/blenderB.mp4" controls width="600"></video>
