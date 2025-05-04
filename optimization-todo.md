@@ -12,7 +12,69 @@
   - 将 `smart3d.zeroyue.com_(Surface Pro 7).png`(229KB) 压缩为 WebP(53KB)，减少约 77%
   - 将 `wallpaper.zeroyue.com_(Surface Pro 7).png`(188KB) 压缩为 WebP(39KB)，减少约 79%
   - 总体优化: 从 4.3MB 减少到 376KB，减少约 91.3%
+- [x] **设计页面更新**: 更新了 `src/pages/design/index.astro` 的内容
+  - 添加了新的设计作品展示
+  - 保持"文件名-分类"的命名规范
+  - 分类包括：平面设计、可视化、三维设计、UI设计
+  - 实现了按分类筛选功能
+  - 添加了图片查看器功能
+- [x] **博客内容更新**: 添加了新的博客文章
+  - 添加了"妙鸭相机风格—个人探索流程"文章
+  - 迁移了相关图片资源到博客图片目录
+  - 保持与现有博客文章格式一致
 
+## 博客文章更新指南
+
+更新博客内容时请遵循以下步骤：
+
+1. **创建博客图片目录**:
+   ```bash
+   mkdir -p public/images/blog/文章名称
+   ```
+
+2. **迁移图片资源**:
+   - 将原始图片复制到博客图片目录
+   - 图片路径格式: `/images/blog/文章名称/图片名.png`
+
+3. **创建博客文章**:
+   - 文件位置: `src/data/blog/文章名称.md`
+   - 文件头部必须包含以下字段:
+     ```md
+     ---
+     title: "文章标题"
+     description: "文章描述"
+     pubDate: YYYY-MM-DD
+     category: "分类名称"
+     draft: false
+     ---
+     ```
+   - 支持的分类: "ai", "design", "intro", "tech" 等
+
+4. **图片引用格式**:
+   ```md
+   ![图片说明](/images/blog/文章名称/图片名.png)
+   ```
+   
+   调整图片尺寸的方法:
+   ```md
+   <!-- 设置宽度为400px -->
+   <img src="/images/blog/文章名称/图片名.png" alt="图片说明" width="400" />
+   
+   <!-- 设置宽度为50%并居中 -->
+   <div style="text-align:center">
+     <img src="/images/blog/文章名称/图片名.png" alt="图片说明" width="50%" />
+   </div>
+   ```
+
+5. **更新优化清单**:
+   - 记录新添加的博客文章
+   - 更新时间和主要内容
+
+6. **特殊格式支持**:
+   - 支持 Markdown 语法
+   - 支持视频嵌入: `<video src="链接" controls width="600"></video>`
+   - 支持外部链接: `[链接文字](链接地址)`
+  
 ## 建议的优化项目
 
 ### 性能优化
