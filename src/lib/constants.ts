@@ -1,10 +1,12 @@
 export const LINKS = {
-  github: "https://github.com/你的GitHub用户名",
-  linkedin: "https://www.linkedin.com/in/你的LinkedIn用户名/",
-  medium: "https://你的Medium用户名.medium.com/",
-  discord: "https://discordapp.com/users/你的Discord用户ID",
-  dribble: "https://dribbble.com/你的Dribbble用户名",
-  email: "你的邮箱地址",
+  github: "https://github.com/yuanyue490",
+  linkedin: "https://www.linkedin.com/in/%E6%82%A6-%E8%A2%81-043976126/",
+  dribbble: "https://dribbble.com/yuanyue",
+  behance: "https://www.behance.net/zeroyue",
+  artstation: "https://www.artstation.com/zero_t",
+  "500px": "https://500px.com/p/Zero_Yue",
+  email: "yuanyue490@gmail.com",
+  wechat: "moonandapple",
 };
 
 export const loaderAnimation = [
