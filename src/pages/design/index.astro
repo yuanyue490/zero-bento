@@ -100,15 +100,22 @@ const categories = [...new Set(designImages.map(project => project.category))];
 ---
 
 <script>
-  import { timeline, type TimelineDefinition } from "motion";
-  import { loaderAnimation } from "../../lib/constants";
-
   // 检查是否在浏览器环境中
   const isBrowser = typeof window !== 'undefined';
 
   if (isBrowser) {
-    const sequence = [loaderAnimation];
-    timeline(sequence as TimelineDefinition);
+    // 使用纯CSS控制loader动画，不依赖motion库
+    document.addEventListener('DOMContentLoaded', () => {
+      const loader = document.querySelector('.loader');
+      if (loader) {
+        setTimeout(() => {
+          loader.classList.add('fade-out');
+          setTimeout(() => {
+            (loader as HTMLElement).style.display = 'none';
+          }, 500);
+        }, 300);
+      }
+    });
   }
 </script>
 
@@ -185,11 +192,22 @@ const categories = [...new Set(designImages.map(project => project.category))];
   </div>
 </Layout>
 
+<style>
+  .loader {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+  }
+  .loader.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+
 <script>
   // 检查是否在浏览器环境中
   if (typeof window !== 'undefined') {
     // 图片查看功能
-    const initImageViewer = () => {
+    document.addEventListener('DOMContentLoaded', () => {
       const viewer = document.getElementById('image-viewer');
       const viewedImage = document.getElementById('viewed-image');
       const imageTitle = document.getElementById('image-title');
@@ -203,7 +221,7 @@ const categories = [...new Set(designImages.map(project => project.category))];
           const title = item.getAttribute('data-title');
           
           if (viewedImage && src) {
-            (viewedImage as HTMLImageElement).src = src;
+            viewedImage.setAttribute('src', src);
             
             if (imageTitle && title) {
               imageTitle.textContent = title;
@@ -248,21 +266,16 @@ const categories = [...new Set(designImages.map(project => project.category))];
           document.body.style.overflow = '';
         }
       });
-    };
+    });
 
     // 分类筛选功能
-    const initFilterButtons = () => {
+    document.addEventListener('DOMContentLoaded', () => {
       const filterButtons = document.querySelectorAll('.filter-btn');
       const allButton = document.querySelector('.active-filter');
       const designItems = document.querySelectorAll('.design-image-container');
       
-      if (!filterButtons.length || !allButton || !designItems.length) {
-        console.error('筛选组件未找到，请检查DOM结构');
-        return;
-      }
-      
       // 点击全部按钮
-      allButton.addEventListener('click', () => {
+      allButton?.addEventListener('click', () => {
         allButton.classList.add('bg-blue-600', 'text-white');
         allButton.classList.remove('bg-neutral-800', 'text-neutral-300');
         
@@ -282,8 +295,8 @@ const categories = [...new Set(designImages.map(project => project.category))];
           const category = button.textContent?.trim();
           
           // 更新按钮样式
-          allButton.classList.remove('bg-blue-600', 'text-white');
-          allButton.classList.add('bg-neutral-800', 'text-neutral-300');
+          allButton?.classList.remove('bg-blue-600', 'text-white');
+          allButton?.classList.add('bg-neutral-800', 'text-neutral-300');
           
           filterButtons.forEach(btn => {
             if (btn === button) {
@@ -306,25 +319,6 @@ const categories = [...new Set(designImages.map(project => project.category))];
           });
         });
       });
-    };
-
-    // 确保 DOM 已完全加载后初始化
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
-        initImageViewer();
-        initFilterButtons();
-      });
-    } else {
-      // 如果 DOM 已经加载完成，直接初始化
-      initImageViewer();
-      initFilterButtons();
-    }
-
-    // 提供一个全局变量供可能的路由变化后重新初始化
-    // 使用索引签名避免类型错误
-    (window as any).reinitDesignPage = () => {
-      initImageViewer();
-      initFilterButtons();
-    };
+    });
   }
 </script> 
