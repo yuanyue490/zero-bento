@@ -189,7 +189,7 @@ const categories = [...new Set(designImages.map(project => project.category))];
   // 检查是否在浏览器环境中
   if (typeof window !== 'undefined') {
     // 图片查看功能
-    document.addEventListener('DOMContentLoaded', () => {
+    const initImageViewer = () => {
       const viewer = document.getElementById('image-viewer');
       const viewedImage = document.getElementById('viewed-image');
       const imageTitle = document.getElementById('image-title');
@@ -248,16 +248,21 @@ const categories = [...new Set(designImages.map(project => project.category))];
           document.body.style.overflow = '';
         }
       });
-    });
+    };
 
     // 分类筛选功能
-    document.addEventListener('DOMContentLoaded', () => {
+    const initFilterButtons = () => {
       const filterButtons = document.querySelectorAll('.filter-btn');
       const allButton = document.querySelector('.active-filter');
       const designItems = document.querySelectorAll('.design-image-container');
       
+      if (!filterButtons.length || !allButton || !designItems.length) {
+        console.error('筛选组件未找到，请检查DOM结构');
+        return;
+      }
+      
       // 点击全部按钮
-      allButton?.addEventListener('click', () => {
+      allButton.addEventListener('click', () => {
         allButton.classList.add('bg-blue-600', 'text-white');
         allButton.classList.remove('bg-neutral-800', 'text-neutral-300');
         
@@ -277,8 +282,8 @@ const categories = [...new Set(designImages.map(project => project.category))];
           const category = button.textContent?.trim();
           
           // 更新按钮样式
-          allButton?.classList.remove('bg-blue-600', 'text-white');
-          allButton?.classList.add('bg-neutral-800', 'text-neutral-300');
+          allButton.classList.remove('bg-blue-600', 'text-white');
+          allButton.classList.add('bg-neutral-800', 'text-neutral-300');
           
           filterButtons.forEach(btn => {
             if (btn === button) {
@@ -301,6 +306,25 @@ const categories = [...new Set(designImages.map(project => project.category))];
           });
         });
       });
-    });
+    };
+
+    // 确保 DOM 已完全加载后初始化
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initImageViewer();
+        initFilterButtons();
+      });
+    } else {
+      // 如果 DOM 已经加载完成，直接初始化
+      initImageViewer();
+      initFilterButtons();
+    }
+
+    // 提供一个全局变量供可能的路由变化后重新初始化
+    // 使用索引签名避免类型错误
+    (window as any).reinitDesignPage = () => {
+      initImageViewer();
+      initFilterButtons();
+    };
   }
 </script> 
