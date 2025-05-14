@@ -50,15 +50,22 @@ const categories = [...new Set(projects.map(project => project.category))];
 ---
 
 <script>
-  import { timeline, type TimelineDefinition } from "motion";
-  import { loaderAnimation } from "../../lib/constants";
-
   // 检查是否在浏览器环境中
   const isBrowser = typeof window !== 'undefined';
 
   if (isBrowser) {
-    const sequence = [loaderAnimation];
-    timeline(sequence as TimelineDefinition);
+    // 使用纯CSS控制loader动画，不依赖motion库
+    document.addEventListener('DOMContentLoaded', () => {
+      const loader = document.querySelector('.loader');
+      if (loader) {
+        setTimeout(() => {
+          loader.classList.add('fade-out');
+          setTimeout(() => {
+            (loader as HTMLElement).style.display = 'none';
+          }, 500);
+        }, 300);
+      }
+    });
   }
 </script>
 
@@ -134,6 +141,17 @@ const categories = [...new Set(projects.map(project => project.category))];
     </div>
   </main>
 </Layout>
+
+<style>
+  .loader {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+  }
+  .loader.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
 
 <script>
   // 检查是否在浏览器环境中

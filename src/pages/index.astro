@@ -18,25 +18,32 @@ const posts = (await getCollection("blog"))?.sort(
 ---
 
 <script>
-  import { stagger, spring, timeline, type TimelineDefinition } from "motion";
-  import { loaderAnimation } from "../lib/constants";
-  const cards = document.querySelectorAll(".card");
+  // 检查是否在浏览器环境中
+  const isBrowser = typeof window !== 'undefined';
 
-  const sequence = [
-    loaderAnimation,
-    [
-      cards,
-      { y: ["40%", "0%"], opacity: [0, 1] },
-      {
-        at: "-0.1",
-        duration: 0.4,
-        delay: stagger(0.3),
-        easing: spring({ velocity: 100, stiffness: 50, damping: 10 }),
-      },
-    ],
-  ];
-
-  timeline(sequence as TimelineDefinition);
+  if (isBrowser) {
+    // 使用纯CSS和原生JavaScript实现动画效果
+    document.addEventListener('DOMContentLoaded', () => {
+      // 处理loader动画
+      const loader = document.querySelector('.loader');
+      if (loader) {
+        setTimeout(() => {
+          loader.classList.add('fade-out');
+          setTimeout(() => {
+            (loader as HTMLElement).style.display = 'none';
+          }, 500);
+        }, 300);
+      }
+      
+      // 处理卡片动画
+      const cards = document.querySelectorAll('.card');
+      cards.forEach((card, index) => {
+        setTimeout(() => {
+          card.classList.add('card-animated');
+        }, 300 + (index * 100)); // 每张卡片错开一定时间显示
+      });
+    });
+  }
 </script>
 
 <Layout
@@ -132,5 +139,26 @@ const posts = (await getCollection("blog"))?.sort(
     background-size: cover;
     background-position: right;
     border-radius: 0.5rem;
+  }
+  
+  .loader {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+  }
+  
+  .loader.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .card {
+    transform: translateY(40%);
+    opacity: 0;
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+  }
+  
+  .card-animated {
+    transform: translateY(0);
+    opacity: 1;
   }
 </style>

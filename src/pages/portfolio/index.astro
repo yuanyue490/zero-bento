@@ -10,12 +10,23 @@ const portfolioItems = (await getCollection("portfolio"))?.sort(
 ---
 
 <script>
-  import { timeline, type TimelineDefinition } from "motion";
-  import { loaderAnimation } from "../../lib/constants";
+  // 检查是否在浏览器环境中
+  const isBrowser = typeof window !== 'undefined';
 
-  const sequence = [loaderAnimation];
-
-  timeline(sequence as TimelineDefinition);
+  if (isBrowser) {
+    // 使用纯CSS控制loader动画，不依赖motion库
+    document.addEventListener('DOMContentLoaded', () => {
+      const loader = document.querySelector('.loader');
+      if (loader) {
+        setTimeout(() => {
+          loader.classList.add('fade-out');
+          setTimeout(() => {
+            (loader as HTMLElement).style.display = 'none';
+          }, 500);
+        }, 300);
+      }
+    });
+  }
 </script>
 
 <Layout
@@ -80,4 +91,15 @@ const portfolioItems = (await getCollection("portfolio"))?.sort(
       }
     </div>
   </main>
-</Layout> 
+</Layout>
+
+<style>
+  .loader {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+  }
+  .loader.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+</style> 
