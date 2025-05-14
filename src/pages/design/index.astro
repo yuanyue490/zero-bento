@@ -140,9 +140,9 @@ const categories = [...new Set(designImages.map(project => project.category))];
     
     <!-- 分类筛选 -->
     <div class="w-full flex flex-wrap gap-3 mb-8">
-      <button class="active-filter px-4 py-2 bg-blue-600 text-white rounded-full text-sm">全部</button>
+      <button class="active-filter px-4 py-2 bg-blue-600 text-white rounded-full text-sm" data-category="all">全部</button>
       {categories.map(category => (
-        <button class="filter-btn px-4 py-2 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 rounded-full text-sm">
+        <button class="filter-btn px-4 py-2 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 rounded-full text-sm" data-category={category}>
           {category}
         </button>
       ))}
@@ -152,7 +152,7 @@ const categories = [...new Set(designImages.map(project => project.category))];
     <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
       {
         designImages.map(image => (
-          <div class="design-image-container group">
+          <div class="design-image-container group" data-category={image.category}>
             <div 
               class="view-image block w-full cursor-pointer overflow-hidden bg-neutral-800 rounded-lg aspect-[4/3] relative group"
               data-src={image.src}
@@ -270,55 +270,65 @@ const categories = [...new Set(designImages.map(project => project.category))];
 
     // 分类筛选功能
     document.addEventListener('DOMContentLoaded', () => {
-      const filterButtons = document.querySelectorAll('.filter-btn');
-      const allButton = document.querySelector('.active-filter');
-      const designItems = document.querySelectorAll('.design-image-container');
-      
-      // 点击全部按钮
-      allButton?.addEventListener('click', () => {
-        allButton.classList.add('bg-blue-600', 'text-white');
-        allButton.classList.remove('bg-neutral-800', 'text-neutral-300');
+      try {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const allButton = document.querySelector('.active-filter');
+        const designItems = document.querySelectorAll('.design-image-container');
         
-        filterButtons.forEach(btn => {
-          btn.classList.remove('bg-blue-600', 'text-white');
-          btn.classList.add('bg-neutral-800', 'text-neutral-300');
-        });
+        console.log('筛选按钮数量:', filterButtons.length);
+        console.log('设计项目数量:', designItems.length);
         
-        designItems.forEach(item => {
-          item.classList.remove('hidden');
-        });
-      });
-      
-      // 点击分类按钮
-      filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const category = button.textContent?.trim();
-          
-          // 更新按钮样式
-          allButton?.classList.remove('bg-blue-600', 'text-white');
-          allButton?.classList.add('bg-neutral-800', 'text-neutral-300');
+        // 点击全部按钮
+        allButton?.addEventListener('click', () => {
+          allButton.classList.add('bg-blue-600', 'text-white');
+          allButton.classList.remove('bg-neutral-800', 'text-neutral-300');
           
           filterButtons.forEach(btn => {
-            if (btn === button) {
-              btn.classList.add('bg-blue-600', 'text-white');
-              btn.classList.remove('bg-neutral-800', 'text-neutral-300');
-            } else {
-              btn.classList.remove('bg-blue-600', 'text-white');
-              btn.classList.add('bg-neutral-800', 'text-neutral-300');
-            }
+            btn.classList.remove('bg-blue-600', 'text-white');
+            btn.classList.add('bg-neutral-800', 'text-neutral-300');
           });
           
-          // 筛选项目
           designItems.forEach(item => {
-            const itemCategory = item.querySelector('.text-neutral-400')?.textContent?.trim();
-            if (category === itemCategory) {
-              item.classList.remove('hidden');
-            } else {
-              item.classList.add('hidden');
-            }
+            item.classList.remove('hidden');
           });
         });
-      });
+        
+        // 点击分类按钮
+        filterButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const category = button.getAttribute('data-category');
+            console.log('选择类别:', category);
+            
+            // 更新按钮样式
+            allButton?.classList.remove('bg-blue-600', 'text-white');
+            allButton?.classList.add('bg-neutral-800', 'text-neutral-300');
+            
+            filterButtons.forEach(btn => {
+              if (btn === button) {
+                btn.classList.add('bg-blue-600', 'text-white');
+                btn.classList.remove('bg-neutral-800', 'text-neutral-300');
+              } else {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('bg-neutral-800', 'text-neutral-300');
+              }
+            });
+            
+            // 筛选项目
+            designItems.forEach(item => {
+              const itemCategory = item.getAttribute('data-category');
+              console.log('项目类别:', itemCategory);
+              
+              if (category === itemCategory) {
+                item.classList.remove('hidden');
+              } else {
+                item.classList.add('hidden');
+              }
+            });
+          });
+        });
+      } catch (error) {
+        console.error('筛选功能初始化错误:', error);
+      }
     });
   }
 </script> 

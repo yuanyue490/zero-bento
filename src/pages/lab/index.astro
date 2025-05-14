@@ -90,9 +90,9 @@ const categories = [...new Set(projects.map(project => project.category))];
     
     <!-- 分类筛选 -->
     <div class="w-full flex flex-wrap gap-3 mb-8">
-      <button class="active-filter px-4 py-2 bg-blue-600 text-white rounded-full text-sm">全部</button>
+      <button class="active-filter px-4 py-2 bg-blue-600 text-white rounded-full text-sm" data-category="all">全部</button>
       {categories.map(category => (
-        <button class="filter-btn px-4 py-2 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 rounded-full text-sm">
+        <button class="filter-btn px-4 py-2 bg-neutral-800 text-neutral-300 hover:bg-neutral-700 rounded-full text-sm" data-category={category}>
           {category}
         </button>
       ))}
@@ -157,56 +157,67 @@ const categories = [...new Set(projects.map(project => project.category))];
   // 检查是否在浏览器环境中
   if (typeof window !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
-      const filterButtons = document.querySelectorAll('.filter-btn');
-      const allButton = document.querySelector('.active-filter');
-      const projectCards = document.querySelectorAll('.project-card');
-      
-      // 所有分类按钮的点击事件
-      filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
+      try {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const allButton = document.querySelector('.active-filter');
+        const projectCards = document.querySelectorAll('.project-card');
+        
+        console.log('Lab页面筛选按钮数量:', filterButtons.length);
+        console.log('Lab页面项目数量:', projectCards.length);
+        
+        // 所有分类按钮的点击事件
+        filterButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            // 移除所有按钮的活跃状态
+            allButton?.classList.remove('active-filter', 'bg-blue-600');
+            allButton?.classList.add('bg-neutral-800');
+            
+            filterButtons.forEach(btn => {
+              btn.classList.remove('active-filter', 'bg-blue-600');
+              btn.classList.add('bg-neutral-800');
+            });
+            
+            // 添加当前按钮的活跃状态
+            button.classList.add('active-filter', 'bg-blue-600');
+            button.classList.remove('bg-neutral-800');
+            
+            // 过滤项目
+            const category = button.getAttribute('data-category');
+            console.log('选择Lab类别:', category);
+            
+            projectCards.forEach(card => {
+              const cardCategory = card.getAttribute('data-category');
+              console.log('Lab项目类别:', cardCategory);
+              
+              if (category === cardCategory) {
+                card.classList.remove('hidden');
+              } else {
+                card.classList.add('hidden');
+              }
+            });
+          });
+        });
+        
+        // "全部"按钮的点击事件
+        allButton?.addEventListener('click', () => {
           // 移除所有按钮的活跃状态
-          allButton?.classList.remove('active-filter', 'bg-blue-600');
-          allButton?.classList.add('bg-neutral-800');
-          
           filterButtons.forEach(btn => {
             btn.classList.remove('active-filter', 'bg-blue-600');
             btn.classList.add('bg-neutral-800');
           });
           
-          // 添加当前按钮的活跃状态
-          button.classList.add('active-filter', 'bg-blue-600');
-          button.classList.remove('bg-neutral-800');
+          // 添加"全部"按钮的活跃状态
+          allButton.classList.add('active-filter', 'bg-blue-600');
+          allButton.classList.remove('bg-neutral-800');
           
-          // 过滤项目
-          const category = button.textContent?.trim();
+          // 显示所有项目
           projectCards.forEach(card => {
-            const cardCategory = card.getAttribute('data-category');
-            if (category && cardCategory === category) {
-              card.classList.remove('hidden');
-            } else {
-              card.classList.add('hidden');
-            }
+            card.classList.remove('hidden');
           });
         });
-      });
-      
-      // "全部"按钮的点击事件
-      allButton?.addEventListener('click', () => {
-        // 移除所有按钮的活跃状态
-        filterButtons.forEach(btn => {
-          btn.classList.remove('active-filter', 'bg-blue-600');
-          btn.classList.add('bg-neutral-800');
-        });
-        
-        // 添加"全部"按钮的活跃状态
-        allButton.classList.add('active-filter', 'bg-blue-600');
-        allButton.classList.remove('bg-neutral-800');
-        
-        // 显示所有项目
-        projectCards.forEach(card => {
-          card.classList.remove('hidden');
-        });
-      });
+      } catch (error) {
+        console.error('Lab页面筛选功能初始化错误:', error);
+      }
     });
   }
 </script> 
