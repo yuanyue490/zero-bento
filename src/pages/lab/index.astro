@@ -162,9 +162,6 @@ const categories = [...new Set(projects.map(project => project.category))];
         const allButton = document.querySelector('.active-filter');
         const projectCards = document.querySelectorAll('.project-card');
         
-        console.log('Lab页面筛选按钮数量:', filterButtons.length);
-        console.log('Lab页面项目数量:', projectCards.length);
-        
         // 所有分类按钮的点击事件
         filterButtons.forEach(button => {
           button.addEventListener('click', () => {
@@ -183,11 +180,9 @@ const categories = [...new Set(projects.map(project => project.category))];
             
             // 过滤项目
             const category = button.getAttribute('data-category');
-            console.log('选择Lab类别:', category);
             
             projectCards.forEach(card => {
               const cardCategory = card.getAttribute('data-category');
-              console.log('Lab项目类别:', cardCategory);
               
               if (category === cardCategory) {
                 (card as HTMLElement).style.display = '';
@@ -216,7 +211,7 @@ const categories = [...new Set(projects.map(project => project.category))];
           });
         });
       } catch (error) {
-        console.error('Lab页面筛选功能初始化错误:', error);
+        console.error('筛选功能错误:', error);
       }
     });
   }

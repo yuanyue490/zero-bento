@@ -275,9 +275,6 @@ const categories = [...new Set(designImages.map(project => project.category))];
         const allButton = document.querySelector('.active-filter');
         const designItems = document.querySelectorAll('.design-image-container');
         
-        console.log('筛选按钮数量:', filterButtons.length);
-        console.log('设计项目数量:', designItems.length);
-        
         // 点击全部按钮
         allButton?.addEventListener('click', () => {
           allButton.classList.add('bg-blue-600', 'text-white');
@@ -297,7 +294,6 @@ const categories = [...new Set(designImages.map(project => project.category))];
         filterButtons.forEach(button => {
           button.addEventListener('click', () => {
             const category = button.getAttribute('data-category');
-            console.log('选择类别:', category);
             
             // 更新按钮样式
             allButton?.classList.remove('bg-blue-600', 'text-white');
@@ -316,7 +312,6 @@ const categories = [...new Set(designImages.map(project => project.category))];
             // 筛选项目
             designItems.forEach(item => {
               const itemCategory = item.getAttribute('data-category');
-              console.log('项目类别:', itemCategory);
               
               if (category === itemCategory) {
                 (item as HTMLElement).style.display = '';
@@ -327,7 +322,7 @@ const categories = [...new Set(designImages.map(project => project.category))];
           });
         });
       } catch (error) {
-        console.error('筛选功能初始化错误:', error);
+        console.error('筛选功能错误:', error);
       }
     });
   }
