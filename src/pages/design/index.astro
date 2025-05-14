@@ -289,7 +289,7 @@ const categories = [...new Set(designImages.map(project => project.category))];
           });
           
           designItems.forEach(item => {
-            item.classList.remove('hidden');
+            (item as HTMLElement).style.display = '';
           });
         });
         
@@ -319,9 +319,9 @@ const categories = [...new Set(designImages.map(project => project.category))];
               console.log('项目类别:', itemCategory);
               
               if (category === itemCategory) {
-                item.classList.remove('hidden');
+                (item as HTMLElement).style.display = '';
               } else {
-                item.classList.add('hidden');
+                (item as HTMLElement).style.display = 'none';
               }
             });
           });

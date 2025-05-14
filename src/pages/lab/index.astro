@@ -190,9 +190,9 @@ const categories = [...new Set(projects.map(project => project.category))];
               console.log('Lab项目类别:', cardCategory);
               
               if (category === cardCategory) {
-                card.classList.remove('hidden');
+                (card as HTMLElement).style.display = '';
               } else {
-                card.classList.add('hidden');
+                (card as HTMLElement).style.display = 'none';
               }
             });
           });
@@ -212,7 +212,7 @@ const categories = [...new Set(projects.map(project => project.category))];
           
           // 显示所有项目
           projectCards.forEach(card => {
-            card.classList.remove('hidden');
+            (card as HTMLElement).style.display = '';
           });
         });
       } catch (error) {
