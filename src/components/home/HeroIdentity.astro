@@ -70,7 +70,7 @@ const { eyebrow, name, titleImage, signatureImage, statement, lines, locationLab
 <style>
   .hero-identity {
     max-width: 48rem;
-    padding-top: clamp(6.8rem, 8vh, 6.8rem);
+    padding-top: calc(clamp(6.8rem, 8vh, 6.8rem) + var(--large-screen-shift, 0rem));
   }
 
   .hero-identity__eyebrow,

@@ -120,7 +120,7 @@ const thoughts = posts.slice(0, 3).map((post) => ({
 
   .home-page__portrait {
     position: absolute;
-    left: 36%;
+    left: 32%;
     bottom: 0;
     width: auto;
     height: 100svh;
@@ -194,6 +194,12 @@ const thoughts = posts.slice(0, 3).map((post) => ({
     .home-page__portrait-glow {
       left: 30%;
       opacity: 0.72;
+    }
+  }
+
+  @media (min-width: 1021px) and (min-height: 1100px) {
+    .home-page {
+      --large-screen-shift: clamp(0rem, calc((100svh - 67.5rem) * 0.28), 6rem);
     }
   }
 
