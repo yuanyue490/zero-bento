@@ -1,5 +1,5 @@
 // uno.config.ts
-import { defineConfig, presetUno, presetWebFonts } from "unocss";
+import { defineConfig, presetUno } from "unocss";
 
 export default defineConfig({
   content: {
@@ -17,6 +17,7 @@ export default defineConfig({
     },
     fontFamily: {
       sans: ["CabinetGrotesk", "Satoshi"],
+      serif: ["DidotLocal", "Georgia", "serif"],
     },
     gridTemplateRows: {
       "auto-250": "repeat(auto-fill, 250px)",
@@ -64,12 +65,5 @@ export default defineConfig({
   },
   presets: [
     presetUno(),
-    presetWebFonts({
-      provider: "fontshare",
-      fonts: {
-        sans: ["Cabinet Grotesk", "Satoshi"],
-        serif: "Zodiak",
-      },
-    }),
   ],
 });

@@ -5,12 +5,22 @@ import "../styles/gridstyle.css";
 interface Props {
   title: string;
   description: string;
-  page?: "travel" | "blog";
+  page?: "travel" | "blog" | "home";
   slug?: string | undefined;
   pubDate?: string;
+  noindex?: boolean;
 }
 
-const { title, description, page, slug, pubDate } = Astro.props;
+const { title, description, page, slug, pubDate, noindex = false } = Astro.props;
+const isHome = page === "home";
+const canonicalUrl =
+  page === "home"
+    ? Astro.url.origin
+    : page === "travel"
+      ? `${Astro.url.origin}/travel`
+      : page === "blog"
+        ? `${Astro.url.origin}/blog/${slug}`
+        : Astro.url.href;
 const image =
   page === "travel"
     ? `${Astro.url.origin}/globe_preview.webp"`
@@ -26,15 +36,6 @@ const schema =
         sameAs: [LINKS.linkedin, LINKS.github],
         image: `${Astro.url.origin}/og-image.png`,
         jobTitle: "产品设计",
-        worksFor: {
-          "@type": "Organization",
-          name: "",
-          address: {
-            "@type": "PostalAddress",
-            addressLocality: "",
-            addressCountry: "",
-          },
-        },
         nationality: {
           "@type": "Country",
           name: "中国",
@@ -70,7 +71,7 @@ const schema =
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -78,12 +79,12 @@ const schema =
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={noindex ? "noindex, follow" : "index, follow"} />
     <!-- Basic OG tags for sharing your website's content on platforms like Facebook and LinkedIn -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url.origin} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta
       property="og:image"
       content={image || `${Astro.url.origin}/og-image.png`}
@@ -97,17 +98,7 @@ const schema =
       content={image || `${Astro.url.origin}/og-image.png`}
     />
 
-    <link rel="preconnect" href="https://cdn.fontshare.com" />
-    {
-      page === "travel" && (
-        <link rel="canonical" href={`${Astro.url.origin}/travel`} />
-      )
-    }
-    {
-      page === "blog" && (
-        <link rel="canonical" href={`${Astro.url.origin}/blog/${slug}`} />
-      )
-    }
+    {!noindex && <link rel="canonical" href={canonicalUrl} />}
     <script type="application/ld+json" set:html={JSON.stringify(schema)} />
     <script type="text/javascript">
       (function(c,l,a,r,i,t,y){
@@ -118,12 +109,18 @@ const schema =
     </script>
   </head>
   <body
-    class="bg-darkslate-700 md:h-screen flex flex-col justify-center items-center relative"
+    class={isHome
+      ? "home-body bg-darkslate-700 min-h-screen relative"
+      : "bg-darkslate-700 md:h-screen flex flex-col justify-center items-center relative"}
   >
-    <div class="magicpattern"></div>
-    <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-      <div class="absolute top-[-30vh] left-1/2 -translate-x-1/2 w-[120vw] h-[60vh] bg-radial-gradient opacity-30"></div>
-    </div>
+    {!isHome && <div class="magicpattern"></div>}
+    {
+      !isHome && (
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div class="absolute top-[-30vh] left-1/2 -translate-x-1/2 w-[120vw] h-[60vh] bg-radial-gradient opacity-30" />
+        </div>
+      )
+    }
     <slot name="loader" />
     <slot />
   </body>
@@ -146,11 +143,32 @@ const schema =
     font-display: swap;
     font-weight: 100 1000;
   }
+  @font-face {
+    font-family: "DidotLocal";
+    src: url("/fonts/Didot.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
 
   body {
     margin: 0;
     font-family: "Satoshi", sans-serif;
     -webkit-font-smoothing: antialiased;
+    cursor: url("/cursors/crosshair.svg") 16 16, crosshair;
+  }
+
+  a,
+  button,
+  [role="button"],
+  input,
+  textarea,
+  select {
+    cursor: url("/cursors/crosshair.svg") 16 16, crosshair;
+  }
+
+  .home-body {
+    overflow-x: hidden;
   }
 
   .bg-radial-gradient {
@@ -163,7 +181,7 @@ const schema =
   h4,
   h5,
   h6 {
-    font-family: "Cabinet Grotesk", sans-serif;
+    font-family: "CabinetGrotesk", sans-serif;
   }
   p {
     font-family: "Satoshi";

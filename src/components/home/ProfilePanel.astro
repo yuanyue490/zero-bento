@@ -1,0 +1,142 @@
+---
+import ThoughtTimeline from "./ThoughtTimeline.astro";
+
+type Thought = {
+  title: string;
+  date: Date;
+  href: string;
+};
+
+interface Props {
+  about: {
+    title: string;
+    lines: string[];
+    href: string;
+  };
+  skills: string[];
+  thoughts: Thought[];
+}
+
+const { about, skills, thoughts } = Astro.props;
+---
+
+<aside class="profile-panel" id="about">
+  <section class="profile-panel__section">
+    <h2>{about.title}</h2>
+    <div class="profile-panel__copy">
+      {about.lines.map((line) => <p>{line}</p>)}
+    </div>
+    <button type="button" class="profile-panel__link" data-about-modal-trigger>
+      Read More <span>→</span>
+    </button>
+  </section>
+
+  <section class="profile-panel__section">
+    <h2>Core Skills</h2>
+    <ul class="profile-panel__skills">
+      {skills.map((skill) => <li>{skill}</li>)}
+    </ul>
+  </section>
+
+  <ThoughtTimeline thoughts={thoughts} />
+</aside>
+
+<style>
+  .profile-panel {
+    display: grid;
+    align-content: start;
+    gap: clamp(2rem, 5vh, 3.4rem);
+    padding-top: clamp(6.8rem, 9vh, 7.4rem);
+    min-height: 100svh;
+  }
+
+  .profile-panel__section {
+    display: grid;
+    gap: 1.3rem;
+  }
+
+  .profile-panel h2 {
+    margin: 0;
+    color: rgba(247, 248, 255, 0.74);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .profile-panel__copy {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .profile-panel__copy p,
+  .profile-panel__skills li {
+    margin: 0;
+    color: rgba(222, 227, 255, 0.54);
+    font-size: 0.94rem;
+    line-height: 1.45;
+  }
+
+  .profile-panel__link {
+    color: #6972ff;
+    width: fit-content;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    text-decoration: none;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .profile-panel__link span {
+    margin-left: 0.45rem;
+  }
+
+  .profile-panel__skills {
+    display: grid;
+    gap: 0.38rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .profile-panel__skills li {
+    position: relative;
+    padding-left: 1.2rem;
+    color: rgba(240, 243, 255, 0.72);
+  }
+
+  .profile-panel__skills li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.58em;
+    width: 0.38rem;
+    height: 0.38rem;
+    border-radius: 999px;
+    background: #7d86ff;
+    box-shadow: 0 0 14px #727bff;
+  }
+
+  @media (max-width: 1020px) {
+    .profile-panel {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      padding-top: 0;
+      min-height: auto;
+    }
+
+    .profile-panel :global(.thought-timeline) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 660px) {
+    .profile-panel {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

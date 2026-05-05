@@ -1,0 +1,529 @@
+---
+import { Icon } from "astro-icon/components";
+import { LINKS } from "../../lib/constants";
+
+type NavItem = {
+  label: string;
+  href: string;
+};
+
+type SocialLink = {
+  label: string;
+  href: string;
+  icon: string;
+};
+
+interface Props {
+  navItems: NavItem[];
+  socialLinks: SocialLink[];
+}
+
+const { navItems, socialLinks } = Astro.props;
+---
+
+<aside class="home-sidebar">
+  <a href="/" class="home-sidebar__brand" aria-label="Zero Yue home">
+    <img src="/images/home/zero-yue-brand-mark.svg" alt="" />
+  </a>
+
+  <nav class="home-sidebar__nav" aria-label="Primary navigation">
+    <span class="home-sidebar__index">01</span>
+    <span class="home-sidebar__rule"></span>
+    {
+      navItems.map((item) => (
+        <a
+          href={item.href}
+          class="home-sidebar__link"
+          data-about-modal-trigger={item.href === "#about" ? true : undefined}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+
+  <div class="home-sidebar__socials">
+    {
+      socialLinks.map((link) => {
+        const label = link.label.toLowerCase();
+
+        return label === "email" ? (
+          <div class="home-sidebar__contact">
+            <a href={link.href} class="home-sidebar__social" aria-label={link.label}>
+              <Icon name={link.icon} />
+            </a>
+            <div class="home-sidebar__contact-panel home-sidebar__contact-panel--email" role="tooltip">
+              <p>给我写信</p>
+              <span>{LINKS.email}</span>
+            </div>
+          </div>
+        ) : label === "wechat" ? (
+          <div class="home-sidebar__wechat">
+            <button type="button" class="home-sidebar__social" aria-label={link.label}>
+              <Icon name={link.icon} />
+            </button>
+            <div class="home-sidebar__contact-panel home-sidebar__wechat-panel" role="tooltip">
+              <p>加我好友</p>
+              <img src="/images/wechat.png" alt="微信二维码" loading="lazy" />
+              <span>微信号: {LINKS.wechat}</span>
+            </div>
+          </div>
+        ) : label === "quotes" ? (
+          <div class="home-sidebar__quote">
+            <button type="button" class="home-sidebar__social" aria-label="随机语录" data-quote-trigger>
+              <Icon name={link.icon} />
+            </button>
+            <div class="home-sidebar__quote-panel" role="status" aria-live="polite" data-quote-panel>
+              <p data-quote-text>保持一点好奇。</p>
+            </div>
+          </div>
+        ) : (
+          <a href={link.href} class="home-sidebar__social" aria-label={link.label}>
+            <Icon name={link.icon} />
+          </a>
+        );
+      })
+    }
+  </div>
+</aside>
+
+<script>
+  const quoteTrigger = document.querySelector("[data-quote-trigger]");
+  const quotePanel = document.querySelector("[data-quote-panel]");
+  const quoteText = document.querySelector("[data-quote-text]");
+
+  const quotes = [
+    "先把问题看清楚，再谈漂亮。",
+    "长期主义不是慢，是不被噪音拽走。",
+    "好设计会退后一步，让体验站到前面。",
+    "秩序不是冷漠，是给情绪留出空间。",
+    "别急着加东西，先确认少了什么。",
+    "复杂不是深刻，清楚才难。",
+    "每一次犹豫，都是系统在说它还不够明确。",
+    "真正的细节，不需要大声证明自己。",
+    "审美不是装饰，是判断力的外观。",
+    "做少一点，但让它更准确。",
+    "灵感会迟到，结构不会。",
+    "一个界面的气质，藏在间距和克制里。",
+    "别为了热闹牺牲方向感。",
+    "设计不是讨好屏幕，是照顾人。",
+    "如果解释太累，可能入口还不够好。",
+    "漂亮容易过期，清晰更耐用。",
+    "故事感来自选择，不来自堆叠。",
+    "真正的高级，是让人不用意识到它高级。",
+    "保持锋利，但不要变得刺人。",
+    "少一点惯性，多一点判断。",
+    "能被删掉还不疼的，先删掉。",
+    "风格是结果，不是开关。",
+    "不要追逐趋势，追问趋势为什么出现。",
+    "好的原型应该让问题尽早暴露。",
+    "设计师的野心，最好藏在体验里。",
+    "节奏感比信息量更重要。",
+    "让视觉有呼吸，让动作有理由。",
+    "不是所有留白都是空，有些是停顿。",
+    "当页面开始吵，先降低一个元素的音量。",
+    "不要让用户替系统整理思路。",
+    "锋芒可以有，但别挡住路径。",
+    "体验的温度，常常来自一个少一点的选择。",
+    "先做真实，再做惊艳。",
+    "设计不是把东西放上去，是决定什么不出现。",
+    "长期看，准确比惊喜更稀缺。",
+    "每个按钮都应该有它存在的理由。",
+    "如果不能解释给未来的自己听，现在就写清楚。",
+    "好奇心是入口，判断力是出口。",
+    "让界面像一个可靠的人，而不是一场表演。",
+    "别让技术实现偷走设计意图。",
+  ];
+
+  let lastIndex = -1;
+  let quoteHideTimer: ReturnType<typeof window.setTimeout> | undefined;
+
+  const hideQuotePanel = () => {
+    quotePanel?.classList.remove("is-visible");
+  };
+
+  const scheduleQuotePanelHide = () => {
+    window.clearTimeout(quoteHideTimer);
+    quoteHideTimer = window.setTimeout(hideQuotePanel, 500);
+  };
+
+  const showRandomQuote = () => {
+    if (!quotePanel || !quoteText) return;
+    window.clearTimeout(quoteHideTimer);
+
+    let nextIndex = Math.floor(Math.random() * quotes.length);
+    if (quotes.length > 1) {
+      while (nextIndex === lastIndex) {
+        nextIndex = Math.floor(Math.random() * quotes.length);
+      }
+    }
+
+    lastIndex = nextIndex;
+    quoteText.textContent = quotes[nextIndex];
+    quotePanel.classList.add("is-visible");
+  };
+
+  quoteTrigger?.addEventListener("pointerdown", (event) => {
+    event.stopPropagation();
+    quoteTrigger.setPointerCapture(event.pointerId);
+    showRandomQuote();
+  });
+
+  quoteTrigger?.addEventListener("pointerup", (event) => {
+    event.stopPropagation();
+    scheduleQuotePanelHide();
+  });
+
+  quoteTrigger?.addEventListener("pointercancel", () => {
+    scheduleQuotePanelHide();
+  });
+
+  quoteTrigger?.addEventListener("lostpointercapture", () => {
+    if (quotePanel?.classList.contains("is-visible")) {
+      scheduleQuotePanelHide();
+    }
+  });
+
+  quoteTrigger?.addEventListener("keydown", (event) => {
+    if (event.key !== " " && event.key !== "Enter") return;
+    event.preventDefault();
+    showRandomQuote();
+  });
+
+  quoteTrigger?.addEventListener("keyup", (event) => {
+    if (event.key !== " " && event.key !== "Enter") return;
+    event.preventDefault();
+    scheduleQuotePanelHide();
+  });
+
+  quotePanel?.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+
+  document.addEventListener("click", () => {
+    hideQuotePanel();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      hideQuotePanel();
+    }
+  });
+</script>
+
+<style>
+  .home-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 20;
+    width: 6.75rem;
+    border-right: 1px solid rgba(130, 146, 214, 0.18);
+    background: rgba(3, 8, 16, 0.54);
+    backdrop-filter: blur(18px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2.8rem 0 3.2rem;
+  }
+
+  .home-sidebar__brand {
+    width: 2.1rem;
+    height: 2.1rem;
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+    opacity: 0.8;
+  }
+
+  .home-sidebar__brand img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .home-sidebar__nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    color: rgba(221, 226, 255, 0.38);
+    text-transform: uppercase;
+  }
+
+  .home-sidebar__index {
+    color: #6972ff;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+  }
+
+  .home-sidebar__rule {
+    width: 1px;
+    height: 1.6rem;
+    background: #6972ff;
+  }
+
+  .home-sidebar__link {
+    writing-mode: vertical-rl;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    transition: color 160ms ease;
+  }
+
+  .home-sidebar__link:hover {
+    color: #f7f8ff;
+  }
+
+  .home-sidebar__socials {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .home-sidebar__social {
+    width: 2.35rem;
+    height: 2.35rem;
+    display: grid;
+    place-items: center;
+    color: #f7f8ff;
+    background: rgba(255, 255, 255, 0.03);
+    border: 0;
+    padding: 0;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 160ms ease, background 160ms ease;
+  }
+
+  .home-sidebar__social:hover {
+    color: #7c84ff;
+    background: rgba(124, 132, 255, 0.12);
+  }
+
+  .home-sidebar__social :global(svg) {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .home-sidebar__contact,
+  .home-sidebar__wechat {
+    position: relative;
+  }
+
+  .home-sidebar__quote {
+    position: relative;
+  }
+
+  .home-sidebar__contact-panel,
+  .home-sidebar__wechat-panel {
+    position: absolute;
+    left: calc(100% + 0.95rem);
+    bottom: -0.85rem;
+    z-index: 30;
+    width: 13.5rem;
+    padding: 0.85rem;
+    border: 1px solid rgba(124, 132, 255, 0.26);
+    border-radius: 0.45rem;
+    background: rgba(8, 13, 29, 0.96);
+    color: rgba(247, 248, 255, 0.9);
+    box-shadow: 0 1.4rem 3.6rem rgba(0, 0, 0, 0.36), 0 0 2.5rem rgba(92, 108, 232, 0.12);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-0.45rem);
+    transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+  }
+
+  .home-sidebar__contact-panel--email {
+    bottom: -0.25rem;
+    width: 15rem;
+    padding: 0.95rem 1.05rem;
+  }
+
+  .home-sidebar__contact-panel::before,
+  .home-sidebar__wechat-panel::before {
+    content: "";
+    position: absolute;
+    left: -0.42rem;
+    bottom: 1.55rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    background: rgba(8, 13, 29, 0.96);
+    border-left: 1px solid rgba(124, 132, 255, 0.26);
+    border-bottom: 1px solid rgba(124, 132, 255, 0.26);
+    transform: rotate(45deg);
+  }
+
+  .home-sidebar__contact:hover .home-sidebar__contact-panel,
+  .home-sidebar__wechat:hover .home-sidebar__wechat-panel {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+
+  .home-sidebar__wechat-panel p {
+    margin: 0 0 0.65rem;
+    color: rgba(247, 248, 255, 0.92);
+    font-size: 0.88rem;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .home-sidebar__contact-panel--email p {
+    margin: 0 0 0.35rem;
+    color: rgba(247, 248, 255, 0.92);
+    font-size: 0.88rem;
+    font-weight: 800;
+  }
+
+  .home-sidebar__wechat-panel img {
+    display: block;
+    width: 11.5rem;
+    height: 11.5rem;
+    object-fit: contain;
+    margin: 0 auto 0.6rem;
+  }
+
+  .home-sidebar__wechat-panel span {
+    display: block;
+    color: rgba(222, 227, 255, 0.72);
+    font-size: 0.78rem;
+    text-align: center;
+  }
+
+  .home-sidebar__contact-panel--email span {
+    display: block;
+    color: rgba(222, 227, 255, 0.74);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .home-sidebar__quote-panel {
+    position: absolute;
+    left: calc(100% + 0.95rem);
+    bottom: -0.25rem;
+    z-index: 30;
+    width: 16rem;
+    min-height: 5.2rem;
+    display: grid;
+    align-items: center;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(124, 132, 255, 0.26);
+    border-radius: 0.45rem;
+    background: rgba(8, 13, 29, 0.96);
+    box-shadow: 0 1.4rem 3.6rem rgba(0, 0, 0, 0.36), 0 0 2.5rem rgba(92, 108, 232, 0.12);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-0.45rem);
+    transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+  }
+
+  .home-sidebar__quote-panel::before {
+    content: "";
+    position: absolute;
+    left: -0.42rem;
+    bottom: 1.1rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    background: rgba(8, 13, 29, 0.96);
+    border-left: 1px solid rgba(124, 132, 255, 0.26);
+    border-bottom: 1px solid rgba(124, 132, 255, 0.26);
+    transform: rotate(45deg);
+  }
+
+  .home-sidebar__quote-panel.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+
+  .home-sidebar__quote-panel p {
+    margin: 0;
+    color: rgba(247, 248, 255, 0.9);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 820px) {
+    .home-sidebar {
+      position: absolute;
+      right: 0;
+      bottom: auto;
+      width: 100%;
+      height: 4.25rem;
+      flex-direction: row;
+      padding: 0 1.25rem;
+      border-right: 0;
+      border-bottom: 1px solid rgba(130, 146, 214, 0.08);
+    }
+
+    .home-sidebar__nav {
+      display: none;
+    }
+
+    .home-sidebar__socials {
+      flex-direction: row;
+      gap: 0.45rem;
+    }
+
+    .home-sidebar__social {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    .home-sidebar__contact-panel,
+    .home-sidebar__wechat-panel {
+      left: auto;
+      right: 0;
+      top: calc(100% + 0.75rem);
+      bottom: auto;
+      transform: translateY(-0.35rem);
+    }
+
+    .home-sidebar__contact-panel::before,
+    .home-sidebar__wechat-panel::before {
+      left: auto;
+      right: 0.62rem;
+      top: -0.42rem;
+      bottom: auto;
+      border-left: 1px solid rgba(124, 132, 255, 0.26);
+      border-bottom: 0;
+      border-top: 1px solid rgba(124, 132, 255, 0.26);
+    }
+
+    .home-sidebar__contact:hover .home-sidebar__contact-panel,
+    .home-sidebar__wechat:hover .home-sidebar__wechat-panel {
+      transform: translateY(0);
+    }
+
+    .home-sidebar__quote-panel {
+      left: auto;
+      right: 0;
+      top: calc(100% + 0.75rem);
+      bottom: auto;
+      width: min(16rem, calc(100vw - 2.5rem));
+      transform: translateY(-0.35rem);
+    }
+
+    .home-sidebar__quote-panel::before {
+      left: auto;
+      right: 0.62rem;
+      top: -0.42rem;
+      bottom: auto;
+      border-left: 1px solid rgba(124, 132, 255, 0.26);
+      border-bottom: 0;
+      border-top: 1px solid rgba(124, 132, 255, 0.26);
+    }
+
+    .home-sidebar__quote-panel.is-visible {
+      transform: translateY(0);
+    }
+  }
+</style>

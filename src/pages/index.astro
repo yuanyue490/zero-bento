@@ -1,164 +1,267 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Card from "../components/Card/index.astro";
-import IntroCard from "../components/IntroCard.astro";
-import ContactsCard from "../components/ContactsCard.astro";
-import TimeZone from "../components/TimeZoneCard.astro";
-import AboutMe from "../components/AboutMe.astro";
-import Now from "../components/Now.astro";
+import BasicLayout from "../layouts/BasicLayout.astro";
 import { getCollection } from "astro:content";
-import { formatDate } from "../lib/helpers";
-import { Icon } from "astro-icon/components";
+import HomeSidebar from "../components/home/HomeSidebar.astro";
+import AboutModal from "../components/home/AboutModal.astro";
+import HeroIdentity from "../components/home/HeroIdentity.astro";
+import ProfilePanel from "../components/home/ProfilePanel.astro";
+import SelectedWorks from "../components/home/SelectedWorks.astro";
+import HomeFooter from "../components/home/HomeFooter.astro";
+import {
+  fallbackSelectedWorks,
+  homeAbout,
+  homeAboutDetail,
+  homeHero,
+  homeNavigation,
+  homeSkills,
+  homeSocialLinks,
+} from "../data/home";
 
 const posts = (await getCollection("blog"))?.sort(
   (blogEntryA, blogEntryB) =>
     (blogEntryB.data.pubDate || new Date()).getTime() -
     (blogEntryA.data.pubDate || new Date()).getTime()
 );
+
+const thoughts = posts.slice(0, 3).map((post) => ({
+  title: post.data.title || "Untitled",
+  date: post.data.pubDate || new Date(),
+  href: `/blog/${post.id}`,
+}));
 ---
 
-<script>
-  // 检查是否在浏览器环境中
-  const isBrowser = typeof window !== 'undefined';
-
-  if (isBrowser) {
-    // 使用纯CSS和原生JavaScript实现动画效果
-    document.addEventListener('DOMContentLoaded', () => {
-      // 处理loader动画
-      const loader = document.querySelector('.loader');
-      if (loader) {
-        setTimeout(() => {
-          loader.classList.add('fade-out');
-          setTimeout(() => {
-            (loader as HTMLElement).style.display = 'none';
-          }, 500);
-        }, 300);
-      }
-      
-      // 处理卡片动画
-      const cards = document.querySelectorAll('.card');
-      cards.forEach((card, index) => {
-        setTimeout(() => {
-          card.classList.add('card-animated');
-        }, 300 + (index * 100)); // 每张卡片错开一定时间显示
-      });
-    });
-  }
-</script>
-
-<Layout
+<BasicLayout
+  page="home"
   title="Zero Yue - 产品设计"
   description="产品设计,UI设计,交互设计,用户体验设计,视觉设计,设计管理"
 >
-  <main
-    class="text-white m-auto p-2 grid gap-2 max-w-6xl overflow-hidden relative w-full sm:p-4 sm:gap-2 md:grid-cols-2 md:gap-3 md:p-6 lg:h-screen lg:grid-rows-8 lg:grid-cols-4 lg:gap-4 lg:max-h-[800px]"
-  >
-    <IntroCard />
-    <AboutMe />
-    <ContactsCard />
-    <TimeZone />
-    <Card
-      colSpan="md:col-span-1"
-      rowSpan="md:row-span-2 flex gap-4"
-      title="作品"
-      href="/design"
-    >
-      <div class="flex flex-col justify-center h-full">        
-        <div class="flex justify-end items-center gap-2 mt-6">
-          <div class="icon-wrapper">
-            <img src="/svg/square-half-light.svg" alt="UI设计" class="custom-icon icon-gradient hover:opacity-100 hover:scale-110 hover:rotate-6 transition-all duration-300 ease-in-out" />
-          </div>
-          <div class="icon-wrapper">
-            <img src="/svg/bounding-box-light.svg" alt="界面设计" class="custom-icon icon-gradient hover:opacity-100 hover:scale-110 hover:rotate-6 transition-all duration-300 ease-in-out" />
-          </div>
-          <div class="icon-wrapper">
-            <img src="/svg/cube-transparent-light.svg" alt="3D设计" class="custom-icon icon-gradient hover:opacity-100 hover:scale-110 hover:rotate-6 transition-all duration-300 ease-in-out" />
-          </div>
-        </div>
-      </div>
-    </Card>
-    <Card
-      colSpan="md:col-span-1"
-      rowSpan="md:row-span-2 flex gap-4"
-      title="博客"
-      href="/blog"
-    >
-      <div class="flex flex-col gap-2 mt-2">
-        {
-          posts?.slice(0, 3).map((post) => (
-            <div class="list-none w-full text-neutral-100 hover:text-neutral-400 ease-in-out transition-colors border-b-neutral-400 border-dashed border-b-1 my-0">
-              <p class="inline-block whitespace-nowrap text-xs">
-                {post.data.title}
-              </p>
-            </div>
-          ))
-        }
-      </div>
-    </Card>
-    <Card 
-      colSpan="md:col-span-1" 
-      rowSpan="md:row-span-1" 
-      title="Project Lab" 
-      href="/lab"
-      bgColor="darkslate-600"
-    >
-      <div class="lab-mask-bg absolute inset-0 opacity-20 z-0"></div>
-      <p class="text-xs relative z-10"></p>
-    </Card>
-    <Card colSpan="md:col-span-1" rowSpan="md:row-span-1">
-      <p class="text-xs">
-        © 2024 · Crafted with ♥️ using <a
-          href="https://astro.build/"
-          target="_blank"
-          class="text-red-500">Astro</a
-        > by ZeroYue.
-      </p>
-    </Card>
+  <HomeSidebar navItems={homeNavigation} socialLinks={homeSocialLinks} />
+  <AboutModal detail={homeAboutDetail} />
+
+  <main class="home-page">
+    <div class="home-page__visual" aria-hidden="true">
+      <div class="home-page__portrait-glow"></div>
+      <img src={homeHero.portraitImage} alt="" class="home-page__portrait" />
+    </div>
+
+    <section class="home-page__left">
+      <HeroIdentity {...homeHero} />
+      <SelectedWorks works={fallbackSelectedWorks} />
+    </section>
+
+    <section class="home-page__right">
+      <ProfilePanel about={homeAbout} skills={homeSkills} thoughts={thoughts} />
+    </section>
+
+    <HomeFooter />
   </main>
-</Layout>
+</BasicLayout>
 
 <style>
-  .icon-wrapper {
+  :global(html) {
+    background: #030712;
+  }
+
+  .home-page {
     position: relative;
+    height: 100svh;
+    min-height: 42rem;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 61% 17%, rgba(65, 80, 169, 0.34), transparent 34rem),
+      radial-gradient(circle at 86% 54%, rgba(54, 71, 156, 0.2), transparent 31rem),
+      linear-gradient(90deg, #030711 0%, #070e1e 46%, #10182d 100%);
+    color: #f7f8ff;
+    padding-left: 9.4rem;
+    padding-right: clamp(2rem, 5vw, 5rem);
+    display: grid;
+    grid-template-columns: minmax(34rem, 1fr) minmax(17rem, 22rem);
+    gap: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .home-page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 7rem 7rem;
+    mask-image: linear-gradient(90deg, transparent, #000 16%, #000 84%, transparent);
+    opacity: 0.2;
+  }
+
+  .home-page__left,
+  .home-page__right,
+  .home-page__visual {
+    position: relative;
+    z-index: 1;
+  }
+
+  .home-page__left {
+    min-width: 0;
+    padding-bottom: 2rem;
+  }
+
+  .home-page__right {
+    min-height: 100svh;
+    display: grid;
+  }
+
+  .home-page__visual {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
     overflow: hidden;
   }
-  
-  .custom-icon {
-    width: 3rem;
-    height: 3rem;
-    filter: invert(70%) opacity(70%) drop-shadow(0px 0px 1px rgba(255, 255, 255, 0.1));
+
+  .home-page__portrait {
+    position: absolute;
+    left: 36%;
+    bottom: 0;
+    width: auto;
+    height: 100svh;
+    min-height: 42rem;
+    max-width: none;
+    object-fit: contain;
+    object-position: bottom center;
+    filter: drop-shadow(0 0 70px rgba(80, 96, 210, 0.22));
+    opacity: 0.94;
   }
-  
-  .icon-gradient {
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.1) 100%);
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.1) 100%);
+
+  .home-page__portrait-glow {
+    position: absolute;
+    left: 34%;
+    top: -18vh;
+    width: min(54vw, 62rem);
+    min-width: 38rem;
+    height: 82vh;
+    border-radius: 48% 52% 58% 42%;
+    background:
+      radial-gradient(ellipse at 54% 0%, rgba(244, 247, 255, 0.38) 0%, rgba(151, 164, 255, 0.24) 20%, transparent 54%),
+      radial-gradient(ellipse at 50% 22%, rgba(92, 108, 232, 0.24) 0%, rgba(54, 69, 178, 0.12) 34%, transparent 68%),
+      linear-gradient(180deg, rgba(210, 218, 255, 0.2) 0%, rgba(96, 112, 255, 0.12) 38%, rgba(18, 27, 72, 0) 82%);
+    filter: blur(44px);
+    opacity: 0.88;
+    transform: rotate(7deg);
   }
-  
-  .lab-mask-bg {
-    background-image: url('/images/Lab-Mask.png');
-    background-size: cover;
-    background-position: right;
-    border-radius: 0.5rem;
-  }
-  
-  .loader {
-    opacity: 1;
-    transition: opacity 0.5s ease-out;
-  }
-  
-  .loader.fade-out {
-    opacity: 0;
+
+  .home-page__portrait-glow::before,
+  .home-page__portrait-glow::after {
+    content: "";
+    position: absolute;
+    inset: auto;
+    border-radius: 999px;
     pointer-events: none;
   }
-  
-  .card {
-    transform: translateY(40%);
-    opacity: 0;
-    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+
+  .home-page__portrait-glow::before {
+    left: 38%;
+    top: 0;
+    width: 24%;
+    height: 72%;
+    background: linear-gradient(180deg, rgba(245, 248, 255, 0.24), rgba(111, 126, 255, 0.08) 58%, transparent);
+    filter: blur(34px);
+    transform: skewX(-13deg);
   }
-  
-  .card-animated {
-    transform: translateY(0);
-    opacity: 1;
+
+  .home-page__portrait-glow::after {
+    left: 26%;
+    top: 38%;
+    width: 46%;
+    height: 42%;
+    background: radial-gradient(ellipse at center, rgba(82, 96, 220, 0.18), transparent 66%);
+    filter: blur(58px);
+  }
+
+  @media (max-width: 1180px) {
+    .home-page {
+      grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem);
+      padding-left: 8.2rem;
+      padding-right: 2rem;
+    }
+
+    .home-page__portrait {
+      left: 38%;
+      width: auto;
+      min-width: 0;
+      opacity: 0.74;
+    }
+
+    .home-page__portrait-glow {
+      left: 30%;
+      opacity: 0.72;
+    }
+  }
+
+  @media (max-width: 1020px) {
+    .home-page {
+      height: auto;
+      min-height: 100vh;
+      overflow-x: clip;
+      overflow-y: visible;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      padding: 4.75rem 1.25rem 0;
+    }
+
+    .home-page__right {
+      min-height: auto;
+      grid-template-columns: minmax(0, 1fr) minmax(17rem, 22rem);
+      align-items: start;
+      gap: 2rem;
+    }
+
+    .home-page__portrait {
+      top: 3.95rem;
+      left: auto;
+      right: -7rem;
+      bottom: auto;
+      width: 31rem;
+      height: auto;
+      min-height: 0;
+      max-height: none;
+      min-width: 0;
+      opacity: 0.36;
+    }
+
+    .home-page__portrait-glow {
+      left: auto;
+      right: -12rem;
+      top: -7rem;
+      width: 35rem;
+      min-width: 0;
+      height: 36rem;
+      opacity: 0.48;
+      filter: blur(38px);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .home-page {
+      padding: 4.5rem 1rem 0;
+    }
+
+    .home-page__right {
+      grid-template-columns: 1fr;
+    }
+
+    .home-page__portrait {
+      top: 3.85rem;
+      right: -8.5rem;
+      width: min(28rem, 118vw);
+      opacity: 0.26;
+    }
+
+    .home-page__portrait-glow {
+      top: -5rem;
+      right: -12rem;
+      width: 28rem;
+      height: 31rem;
+      opacity: 0.38;
+    }
   }
 </style>

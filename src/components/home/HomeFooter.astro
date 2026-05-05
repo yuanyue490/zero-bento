@@ -1,0 +1,41 @@
+<footer class="home-footer">
+  <span>© 2025 · Zero Yue · Built with Astro</span>
+  <a href="https://astro.build/" target="_blank" rel="noopener noreferrer" aria-label="Astro">A*</a>
+</footer>
+
+<style>
+  .home-footer {
+    position: fixed;
+    right: 2.4rem;
+    bottom: 2.1rem;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: rgba(222, 227, 255, 0.3);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .home-footer a {
+    width: 2.4rem;
+    height: 2.4rem;
+    border: 1px solid rgba(222, 227, 255, 0.2);
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    color: rgba(222, 227, 255, 0.48);
+    text-decoration: none;
+  }
+
+  @media (max-width: 1020px) {
+    .home-footer {
+      position: static;
+      margin-top: 3rem;
+      justify-content: flex-end;
+      padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    }
+  }
+</style>

@@ -1,0 +1,129 @@
+---
+import { formatDate } from "../../lib/helpers";
+
+type Thought = {
+  title: string;
+  date: Date;
+  href: string;
+};
+
+interface Props {
+  thoughts: Thought[];
+}
+
+const { thoughts } = Astro.props;
+---
+
+<section class="thought-timeline">
+  <h2>Thoughts / 信号日志</h2>
+  <ol>
+    {
+      thoughts.map((thought, index) => (
+        <li class={index === 0 ? "is-active" : ""}>
+          <span></span>
+          <a href={thought.href}>{thought.title}</a>
+          <time datetime={thought.date.toISOString()}>{formatDate(thought.date)}</time>
+        </li>
+      ))
+    }
+  </ol>
+  <a href="/blog" class="thought-timeline__more">View All Entries <b>→</b></a>
+</section>
+
+<style>
+  .thought-timeline {
+    display: grid;
+    gap: 1.2rem;
+    width: min(21rem, 100%);
+    margin-top: auto;
+    padding-bottom: 4.2rem;
+  }
+
+  .thought-timeline h2 {
+    margin: 0;
+    color: rgba(247, 248, 255, 0.72);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .thought-timeline ol {
+    display: grid;
+    gap: 0.82rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .thought-timeline li {
+    position: relative;
+    display: grid;
+    gap: 0.28rem;
+    padding-left: 2.05rem;
+  }
+
+  .thought-timeline li::before {
+    content: "";
+    position: absolute;
+    left: 0.44rem;
+    top: 0.92rem;
+    bottom: -1.15rem;
+    width: 1px;
+    background: rgba(120, 130, 255, 0.26);
+  }
+
+  .thought-timeline li:last-child::before {
+    display: none;
+  }
+
+  .thought-timeline li > span {
+    position: absolute;
+    left: 0;
+    top: 0.12rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 999px;
+    border: 2px solid rgba(130, 140, 255, 0.42);
+    background: rgba(7, 12, 27, 0.9);
+  }
+
+  .thought-timeline li.is-active > span {
+    border-color: #7b84ff;
+    background: #7b84ff;
+    box-shadow: 0 0 0 0.45rem rgba(123, 132, 255, 0.15), 0 0 22px #7b84ff;
+  }
+
+  .thought-timeline a {
+    color: rgba(244, 246, 255, 0.82);
+    text-decoration: none;
+    font-size: 0.86rem;
+    line-height: 1.4;
+  }
+
+  .thought-timeline time {
+    color: rgba(222, 227, 255, 0.34);
+    font-size: 0.78rem;
+  }
+
+  .thought-timeline__more {
+    color: #6972ff !important;
+    width: fit-content;
+    font-size: 0.74rem !important;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .thought-timeline__more b {
+    margin-left: 0.45rem;
+  }
+
+  @media (max-width: 1020px) {
+    .thought-timeline {
+      align-self: start;
+      margin-top: 0;
+      padding-bottom: 0;
+    }
+  }
+</style>

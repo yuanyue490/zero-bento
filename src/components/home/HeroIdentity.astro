@@ -1,0 +1,222 @@
+---
+interface Props {
+  eyebrow: string;
+  name: string;
+  titleImage?: string;
+  signatureImage?: string;
+  statement: string;
+  lines: string[];
+  locationLabel: string;
+}
+
+const { eyebrow, name, titleImage, signatureImage, statement, lines, locationLabel } = Astro.props;
+---
+
+<section class="hero-identity">
+  <p class="hero-identity__eyebrow">{eyebrow}</p>
+
+  <div class="hero-identity__title-wrap">
+    {
+      titleImage ? (
+        <img src={titleImage} alt={name} class="hero-identity__title-image" />
+      ) : (
+        <h1 class="hero-identity__title">{name}</h1>
+      )
+    }
+    {
+      signatureImage ? (
+        <img src={signatureImage} alt="" class="hero-identity__signature" />
+      ) : (
+        <span class="hero-identity__signature-text" aria-hidden="true">
+          Zero Yue
+        </span>
+      )
+    }
+  </div>
+
+  <div class="hero-identity__statement">
+    <p>{statement}</p>
+    <div>
+      {lines.map((line) => <span>{line}</span>)}
+    </div>
+  </div>
+
+  <div class="hero-identity__location">
+    <span>{locationLabel}</span>
+    <time id="home-current-time">--:--:-- CST</time>
+    <b>Now</b>
+  </div>
+</section>
+
+<script>
+  const timeNode = document.getElementById("home-current-time");
+
+  function updateHomeTime() {
+    if (!timeNode) return;
+    const formatter = new Intl.DateTimeFormat("zh-CN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+      timeZone: "Asia/Shanghai",
+    });
+    timeNode.textContent = `${formatter.format(new Date())} CST`;
+  }
+
+  updateHomeTime();
+  window.setInterval(updateHomeTime, 1000);
+</script>
+
+<style>
+  .hero-identity {
+    max-width: 48rem;
+    padding-top: clamp(6.8rem, 8vh, 6.8rem);
+  }
+
+  .hero-identity__eyebrow,
+  .hero-identity__location span,
+  .hero-identity__location b {
+    color: #6972ff;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+  }
+
+  .hero-identity__title-wrap {
+    position: relative;
+    margin-top: 1.15rem;
+  }
+
+  .hero-identity__title {
+    margin: 0;
+    color: #fff;
+    font-family: "DidotLocal", Didot, "Bodoni 72", Georgia, serif;
+    font-size: clamp(5.4rem, 9vw, 9.2rem);
+    font-weight: 400;
+    line-height: 0.88;
+    letter-spacing: 0;
+    text-shadow: 0 0 42px rgba(180, 190, 255, 0.14);
+  }
+
+  .hero-identity__title-image {
+    width: min(48rem, 72vw);
+    height: auto;
+    display: block;
+  }
+
+  .hero-identity__signature,
+  .hero-identity__signature-text {
+    position: absolute;
+    left: 12rem;
+    bottom: -2.2rem;
+    width: clamp(18rem, 32vw, 29rem);
+  }
+
+  .hero-identity__signature {
+    height: auto;
+    display: block;
+    opacity: 0.82;
+    filter: drop-shadow(0 0 18px rgba(95, 98, 255, 0.42));
+    mix-blend-mode: screen;
+  }
+
+  .hero-identity__signature-text {
+    color: rgba(70, 75, 210, 0.56);
+    font-family: "Brush Script MT", cursive;
+    font-size: 3.8rem;
+    font-weight: 400;
+    line-height: 1;
+    transform: rotate(-8deg);
+  }
+
+  .hero-identity__statement {
+    width: min(30rem, 100%);
+    margin-top: clamp(2.4rem, 4.8vh, 3.4rem);
+    padding: 1.45rem 1.6rem;
+    background: linear-gradient(90deg, rgba(6, 13, 29, 0.72), rgba(6, 13, 29, 0.22));
+    border-left: 1px solid rgba(117, 127, 255, 0.6);
+  }
+
+  .hero-identity__statement p {
+    margin: 0;
+    color: rgba(246, 248, 255, 0.88);
+    font-size: clamp(1.1rem, 1.6vw, 1.45rem);
+    font-weight: 600;
+  }
+
+  .hero-identity__statement div {
+    display: grid;
+    gap: 0.34rem;
+    margin-top: 1.35rem;
+  }
+
+  .hero-identity__statement span {
+    color: rgba(220, 225, 255, 0.36);
+    font-size: 0.76rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .hero-identity__location {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: clamp(2.1rem, 4.2vh, 3rem);
+  }
+
+  .hero-identity__location time {
+    color: #f7f8ff;
+    font-family: "DidotLocal", Didot, "Bodoni 72", Georgia, serif;
+    font-size: 1.28rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-identity__location b {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: rgba(221, 226, 255, 0.42);
+  }
+
+  .hero-identity__location b::after {
+    content: "";
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 999px;
+    background: #727bff;
+    box-shadow: 0 0 14px #727bff;
+  }
+
+  @media (max-width: 1020px) {
+    .hero-identity {
+      padding-top: 0.9rem;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .hero-identity__title {
+      font-size: clamp(4.1rem, 19vw, 5.8rem);
+    }
+
+    .hero-identity__signature-text {
+      left: 8rem;
+      bottom: -1.4rem;
+      font-size: 2.7rem;
+    }
+
+    .hero-identity__signature {
+      left: 6.8rem;
+      bottom: -1.5rem;
+      width: min(20rem, 62vw);
+    }
+
+    .hero-identity__statement {
+      margin-top: 3.2rem;
+      padding: 1.1rem 1.2rem;
+    }
+
+    .hero-identity__location {
+      margin-top: 2.2rem;
+    }
+  }
+</style>

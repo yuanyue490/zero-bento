@@ -1,0 +1,186 @@
+---
+type WorkItem = {
+  title: string;
+  subtitle: string;
+  year: string;
+  href: string;
+  image?: string;
+};
+
+interface Props {
+  works: WorkItem[];
+}
+
+const { works } = Astro.props;
+---
+
+<section class="selected-works">
+  <header class="selected-works__header">
+    <h2>Selected Works</h2>
+    <span></span>
+    <a class="selected-works__all-projects" aria-disabled="true">View All Projects <b>→</b></a>
+  </header>
+
+  <div class="selected-works__grid">
+    {
+      works.map((work) => {
+        const isExternal = work.href.startsWith("http");
+
+        return (
+        <a
+          href={work.href}
+          class="work-card"
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "noopener noreferrer" : undefined}
+        >
+          {work.image && <img src={work.image} alt={`${work.title} 项目预览`} loading="lazy" />}
+          <span class="work-card__shade"></span>
+          <div>
+            <strong>{work.title}</strong>
+            <p>{work.subtitle}</p>
+            <time>{work.year}</time>
+          </div>
+        </a>
+        );
+      })
+    }
+  </div>
+</section>
+
+<style>
+  .selected-works {
+    width: min(61rem, 100%);
+    margin-top: clamp(2rem, 4.8vh, 4rem);
+  }
+
+  .selected-works__header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.4rem;
+    margin-bottom: 1.35rem;
+  }
+
+  .selected-works h2,
+  .selected-works__header a,
+  .work-card strong,
+  .work-card p,
+  .work-card time {
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+  }
+
+  .selected-works h2 {
+    margin: 0;
+    color: rgba(247, 248, 255, 0.78);
+    font-size: 0.78rem;
+  }
+
+  .selected-works__header span {
+    height: 1px;
+    background: linear-gradient(90deg, rgba(112, 122, 255, 0.38), rgba(112, 122, 255, 0));
+  }
+
+  .selected-works__header a {
+    color: #6972ff;
+    text-decoration: none;
+    font-size: 0.74rem;
+    font-weight: 800;
+  }
+
+  .selected-works__header a b {
+    margin-left: 0.45rem;
+  }
+
+  .selected-works__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .work-card {
+    position: relative;
+    min-height: clamp(7.8rem, 14vh, 9.3rem);
+    overflow: hidden;
+    border: 1px solid rgba(112, 122, 255, 0.16);
+    border-radius: 0.32rem;
+    background: rgba(4, 9, 22, 0.7);
+    transition: transform 180ms ease, border-color 180ms ease;
+  }
+
+  .work-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(112, 122, 255, 0.7);
+  }
+
+  .work-card img,
+  .work-card__shade {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .work-card img {
+    object-fit: cover;
+    opacity: 0.52;
+    filter: saturate(0.72) contrast(1.08);
+    transition: opacity 180ms ease, transform 220ms ease;
+  }
+
+  .work-card:hover img {
+    opacity: 0.7;
+    transform: scale(1.04);
+  }
+
+  .work-card__shade {
+    background: linear-gradient(180deg, rgba(4, 7, 17, 0.12), rgba(4, 7, 17, 0.88));
+  }
+
+  .work-card div {
+    position: absolute;
+    left: 1.05rem;
+    right: 1.05rem;
+    bottom: 1rem;
+    z-index: 1;
+  }
+
+  .work-card strong,
+  .work-card p,
+  .work-card time {
+    display: block;
+    color: #f7f8ff;
+    font-size: 0.72rem;
+    line-height: 1.5;
+  }
+
+  .work-card p,
+  .work-card time {
+    color: rgba(230, 234, 255, 0.68);
+  }
+
+  @media (max-width: 1020px) {
+    .selected-works {
+      margin-top: 3rem;
+    }
+
+    .selected-works__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 620px) {
+    .selected-works__header {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .selected-works__header span {
+      display: none;
+    }
+
+    .selected-works__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
