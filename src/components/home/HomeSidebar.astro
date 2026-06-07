@@ -234,6 +234,17 @@ const { navItems, socialLinks } = Astro.props;
     place-items: center;
     text-decoration: none;
     opacity: 0.8;
+    transition: opacity 180ms ease, transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 180ms ease;
+  }
+
+  .home-sidebar__brand:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    filter: drop-shadow(0 0 12px rgba(105, 114, 255, 0.44));
+  }
+
+  .home-sidebar__brand:active {
+    transform: translateY(0) scale(0.92);
   }
 
   .home-sidebar__brand img {
@@ -270,11 +281,18 @@ const { navItems, socialLinks } = Astro.props;
     text-decoration: none;
     font-size: 0.78rem;
     letter-spacing: 0.14em;
-    transition: color 160ms ease;
+    transition: color 160ms ease, transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1), text-shadow 180ms ease;
   }
 
   .home-sidebar__link:hover {
     color: #f7f8ff;
+    transform: translateX(2px);
+    text-shadow: 0 0 14px rgba(105, 114, 255, 0.42);
+  }
+
+  .home-sidebar__link:active {
+    color: #8e96ff;
+    transform: translateX(2px) scale(0.96);
   }
 
   .home-sidebar__socials {
@@ -294,12 +312,25 @@ const { navItems, socialLinks } = Astro.props;
     padding: 0;
     text-decoration: none;
     cursor: pointer;
-    transition: color 160ms ease, background 160ms ease;
+    transition:
+      color 160ms ease,
+      background 160ms ease,
+      box-shadow 180ms ease,
+      transform 140ms cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   .home-sidebar__social:hover {
     color: #7c84ff;
     background: rgba(124, 132, 255, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(124, 132, 255, 0.18), 0 0 18px rgba(92, 108, 232, 0.12);
+    transform: translateY(-2px);
+  }
+
+  .home-sidebar__social:active {
+    color: #a9aeff;
+    background: rgba(124, 132, 255, 0.2);
+    box-shadow: inset 0 0 0 1px rgba(154, 161, 255, 0.34);
+    transform: translateY(0) scale(0.88);
   }
 
   .home-sidebar__social :global(svg) {
@@ -357,7 +388,9 @@ const { navItems, socialLinks } = Astro.props;
   }
 
   .home-sidebar__contact:hover .home-sidebar__contact-panel,
-  .home-sidebar__wechat:hover .home-sidebar__wechat-panel {
+  .home-sidebar__contact:focus-within .home-sidebar__contact-panel,
+  .home-sidebar__wechat:hover .home-sidebar__wechat-panel,
+  .home-sidebar__wechat:focus-within .home-sidebar__wechat-panel {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
@@ -499,7 +532,9 @@ const { navItems, socialLinks } = Astro.props;
     }
 
     .home-sidebar__contact:hover .home-sidebar__contact-panel,
-    .home-sidebar__wechat:hover .home-sidebar__wechat-panel {
+    .home-sidebar__contact:focus-within .home-sidebar__contact-panel,
+    .home-sidebar__wechat:hover .home-sidebar__wechat-panel,
+    .home-sidebar__wechat:focus-within .home-sidebar__wechat-panel {
       transform: translateY(0);
     }
 

@@ -86,6 +86,7 @@ const { thoughts } = Astro.props;
     border-radius: 999px;
     border: 2px solid rgba(130, 140, 255, 0.42);
     background: rgba(7, 12, 27, 0.9);
+    transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
   }
 
   .thought-timeline li.is-active > span {
@@ -95,10 +96,31 @@ const { thoughts } = Astro.props;
   }
 
   .thought-timeline a {
+    display: block;
     color: rgba(244, 246, 255, 0.82);
     text-decoration: none;
     font-size: 0.86rem;
     line-height: 1.4;
+    transition: color 160ms ease, transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1), text-shadow 180ms ease;
+  }
+
+  .thought-timeline li:has(a:hover) > span,
+  .thought-timeline li:has(a:focus-visible) > span {
+    border-color: #8d95ff;
+    background: #5963d9;
+    box-shadow: 0 0 0 0.3rem rgba(123, 132, 255, 0.1), 0 0 16px rgba(123, 132, 255, 0.5);
+    transform: scale(1.08);
+  }
+
+  .thought-timeline li a:hover {
+    color: #fff;
+    transform: translateX(3px);
+    text-shadow: 0 0 14px rgba(105, 114, 255, 0.3);
+  }
+
+  .thought-timeline li a:active {
+    color: #aeb4ff;
+    transform: translateX(1px) scale(0.985);
   }
 
   .thought-timeline time {
@@ -116,7 +138,13 @@ const { thoughts } = Astro.props;
   }
 
   .thought-timeline__more b {
+    display: inline-block;
     margin-left: 0.45rem;
+    transition: transform 160ms ease;
+  }
+
+  .thought-timeline__more:hover b {
+    transform: translateX(3px);
   }
 
   @media (max-width: 1020px) {

@@ -167,6 +167,11 @@ const schema =
     cursor: url("/cursors/crosshair.svg") 16 16, crosshair;
   }
 
+  :where(a, button, [role="button"], input, textarea, select):focus-visible {
+    outline: 2px solid rgba(125, 134, 255, 0.9);
+    outline-offset: 4px;
+  }
+
   .home-body {
     overflow-x: hidden;
   }
@@ -189,5 +194,16 @@ const schema =
 
   b {
     font-weight: 700 !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 </style>

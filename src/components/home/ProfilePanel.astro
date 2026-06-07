@@ -89,10 +89,28 @@ const { about, skills, thoughts } = Astro.props;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     cursor: pointer;
+    transition: color 160ms ease, transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1), text-shadow 160ms ease;
+  }
+
+  .profile-panel__link:hover {
+    color: #969dff;
+    transform: translateX(3px);
+    text-shadow: 0 0 14px rgba(105, 114, 255, 0.35);
+  }
+
+  .profile-panel__link:active {
+    color: #c1c5ff;
+    transform: translateX(1px) scale(0.97);
   }
 
   .profile-panel__link span {
+    display: inline-block;
     margin-left: 0.45rem;
+    transition: transform 160ms ease;
+  }
+
+  .profile-panel__link:hover span {
+    transform: translateX(3px);
   }
 
   .profile-panel__skills {
